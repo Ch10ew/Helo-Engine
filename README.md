@@ -1,2 +1,19 @@
-# Helo-Engine
-2D Game Engine intended for platformers and top-down RPGs made for my Final Year Project.
+# Helo Engine
+
+Helo Engine is a 2D game engine intended platformers and top-down RPGs.
+
+- [Overview](#overview)
+- [Examples](#examples)
+- [Building](#building)
+
+
+## Overview
+WIP
+
+
+## Examples
+WIP
+
+
+## Building
+WIP
