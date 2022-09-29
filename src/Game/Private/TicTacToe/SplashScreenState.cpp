@@ -3,11 +3,11 @@
 
 #include <iostream>
 
-namespace he
+namespace ttt
 {
     SplashScreenState::SplashScreenState()
     {
-        _coreGameData = CoreGameData::GetInstance();
+        _coreGameData = he::CoreGameData::GetInstance();
     }
 
     void SplashScreenState::ProcessInput(sf::Event event)
@@ -49,4 +49,4 @@ namespace he
     void SplashScreenState::Resume()
     {
     }
-} // namespace he
+} // namespace ttt

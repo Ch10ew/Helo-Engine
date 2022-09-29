@@ -1,5 +1,5 @@
-#ifndef GAME_STATE_HPP
-#define GAME_STATE_HPP
+#ifndef HE_GAME_STATE_HPP
+#define HE_GAME_STATE_HPP
 
 #include <SFML/Graphics.hpp>
 
@@ -29,4 +29,4 @@ namespace he
     };
 } // namespace he
 
-#endif // GAME_STATE_HPP
+#endif // HE_GAME_STATE_HPP

@@ -1,6 +1,9 @@
 #include "Core/Game.hpp"
+
 #include "Core/CoreGameData.hpp"
 #include "TicTacToe/SplashScreenState.hpp"
+
+#include <spdlog/spdlog.h>
 
 #include <memory>
 #include <string>
@@ -32,11 +35,13 @@ namespace he
 
     void Game::SetInitialState(std::unique_ptr<GameState> state)
     {
+        spdlog::info("[engine] Game::SetInitialState(): State set");
         _coreGameData->stateMachine.AddState(std::move(state));
     }
 
     void Game::Run()
     {
+        spdlog::info("[engine] Game::Run(): Main game loop starting...");
         float currentTime = this->_clock.getElapsedTime().asSeconds();
         float accumulator = 0.0f;
 

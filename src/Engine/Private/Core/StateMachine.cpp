@@ -1,5 +1,7 @@
 #include "Core/StateMachine.hpp"
 
+#include "debug_assert.hpp"
+
 namespace he
 {
     StateMachine::StateMachine()
@@ -24,6 +26,9 @@ namespace he
 
     StateMachine::GameStateUniquePtr& StateMachine::GetActiveState()
     {
+        // log and terminate if empty at the start (stack is guaranteed not empty during runtime by logic, but initial insertion isnt guaranteed)
+        DEBUG_ASSERT(!(_states.empty()), ModuleStateMachine{});
+
         return _states.top();
     }
 

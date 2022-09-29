@@ -1,8 +1,12 @@
-#ifndef STATE_MACHINE_HPP
-#define STATE_MACHINE_HPP
+#ifndef HE_STATE_MACHINE_HPP
+#define HE_STATE_MACHINE_HPP
 
 #include "Core/GameState.hpp"
 
+#include <debug_assert.hpp>
+#include <spdlog/spdlog.h>
+
+#include <iostream>
 #include <memory>
 #include <stack>
 
@@ -39,7 +43,24 @@ namespace he
         bool _isRemoving = false;
         bool _isAdding = false;
         bool _isReplacing = false;
+
+#pragma region Debug Assert
+
+    private:
+#define MODULE_STATE_MACHINE_LEVEL 1
+        struct ModuleStateMachine : debug_assert::default_handler,
+                                    debug_assert::set_level<MODULE_STATE_MACHINE_LEVEL>
+        {
+            static void handle(const debug_assert::source_location& loc, const char* expression) noexcept
+            {
+                spdlog::error("[debug assert] {0}:{1}: Assertion '{2}' failed.", loc.file_name, loc.line_number, expression);
+                exit(EXIT_FAILURE);
+            }
+        };
+#undef MODULE_STATE_MACHINE_LEVEL
+
+#pragma endregion
     };
 } // namespace he
 
-#endif // STATE_MACHINE_HPP
+#endif // HE_STATE_MACHINE_HPP

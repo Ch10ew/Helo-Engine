@@ -1,5 +1,5 @@
-#ifndef GAME_HPP
-#define GAME_HPP
+#ifndef HE_GAME_HPP
+#define HE_GAME_HPP
 
 #include "Core/CoreGameData.hpp"
 #include "Core/StateMachine.hpp"
@@ -30,7 +30,7 @@ namespace he
         Game(std::string title);
 
         /**
-         * @brief Construct a new Game object
+         * @brief Construct a new Game object.
          *
          * @param width Window width.
          * @param height Window height.
@@ -38,6 +38,11 @@ namespace he
          */
         Game(int width, int height, std::string title);
 
+        /**
+         * Set the Initial State of the game.
+         *
+         * @param state State to be run as the first state.
+         */
         void SetInitialState(std::unique_ptr<GameState> state);
 
         /**
@@ -94,4 +99,4 @@ namespace he
     };
 } // namespace he
 
-#endif // GAME_HPP
+#endif // HE_GAME_HPP

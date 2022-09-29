@@ -1,5 +1,5 @@
-#ifndef CORE_GAME_DATA_HPP
-#define CORE_GAME_DATA_HPP
+#ifndef HE_CORE_GAME_DATA_HPP
+#define HE_CORE_GAME_DATA_HPP
 
 #include "Core/StateMachine.hpp"
 
@@ -65,4 +65,4 @@ namespace he
     };
 } // namespace he
 
-#endif // CORE_GAME_DATA_HPP
+#endif // HE_CORE_GAME_DATA_HPP

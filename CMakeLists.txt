@@ -51,12 +51,46 @@ include(ExternalProject)
 ExternalProject_Add(imgui-sfml
     PREFIX "${CMAKE_BINARY_DIR}/lib"
     GIT_REPOSITORY "https://github.com/eliasdaler/imgui-sfml.git"
-    GIT_TAG "master"
+    GIT_TAG "a80d9547832c57a149cda452ed9456def5bb6328"
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/lib/imgui-sfml -DIMGUI_DIR=${CMAKE_BINARY_DIR}/lib/imgui -DSFML_DIR=${CMAKE_BINARY_DIR}/lib/src/sfml-build -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
 )
 
 # Prevent build for ImGUI-SFML on all targets build
 set_target_properties(imgui-sfml PROPERTIES EXCLUDE_FROM_ALL TRUE)
+
+
+
+# Get debug_assert library from GitHub
+include(ExternalProject)
+ExternalProject_Add(debug_assert-external
+        URL https://raw.githubusercontent.com/foonathan/debug_assert/master/debug_assert.hpp
+        SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/lib/debug_assert"
+        DOWNLOAD_DIR "${CMAKE_CURRENT_BINARY_DIR}/lib/debug_assert"
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ""
+        CONFIGURE_COMMAND ""
+        DOWNLOAD_NO_EXTRACT TRUE
+        DOWNLOAD_NAME "debug_assert.hpp"
+)
+
+add_library(debug_assert INTERFACE)
+
+
+
+# Get spdlog library from GitHub
+include(ExternalProject)
+ExternalProject_Add(spdlog-external
+    PREFIX "${CMAKE_BINARY_DIR}/lib"
+    GIT_REPOSITORY "https://github.com/gabime/spdlog.git"
+    GIT_TAG "v1.x"
+    SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/lib/spdlog"
+    DOWNLOAD_DIR "${CMAKE_CURRENT_BINARY_DIR}/lib/spdlog"
+    BUILD_COMMAND ""
+    INSTALL_COMMAND ""
+    CONFIGURE_COMMAND ""
+)
+
+add_library(spdlog INTERFACE)
 
 
 
@@ -72,6 +106,8 @@ link_directories(${CMAKE_BINARY_DIR}/lib/imgui/${CMAKE_INSTALL_LIBDIR})
 include_directories(${CMAKE_BINARY_DIR}/lib/imgui/${CMAKE_INSTALL_INCLUDEDIR})
 link_directories(${CMAKE_BINARY_DIR}/lib/imgui-sfml/${CMAKE_INSTALL_LIBDIR})
 include_directories(${CMAKE_BINARY_DIR}/lib/imgui-sfml/${CMAKE_INSTALL_INCLUDEDIR})
+link_directories(${CMAKE_BINARY_DIR}/lib/spdlog/${CMAKE_INSTALL_LIBDIR})
+include_directories(${CMAKE_BINARY_DIR}/lib/spdlog/${CMAKE_INSTALL_INCLUDEDIR})
 
 # This is required for SFML
 find_package(OpenGL REQUIRED)
@@ -85,11 +121,21 @@ find_package(Threads REQUIRED)
 add_dependencies(imgui imgui-external)
 target_include_directories(imgui SYSTEM INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/lib/imgui)
 
+# Set up debug_assert library
+add_dependencies(debug_assert debug_assert-external)
+target_include_directories(debug_assert SYSTEM INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/lib/debug_assert)
 
+# Set up spdlog library
+add_dependencies(spdlog spdlog-external)
+target_include_directories(spdlog SYSTEM INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/lib/spdlog/include/spdlog)
+
+
+
+# Include header directory
+include_directories("./src/Engine/Public")
+include_directories("./src/Game/Public")
 
 # Create main target
-include_directories("./src/Public")
-
 file(GLOB_RECURSE sources src/*)
 add_executable(Game ${sources})
 
@@ -97,18 +143,18 @@ add_executable(Game ${sources})
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     if(${SFML_STATIC_LIBRARIES})
-        target_link_libraries(Game imgui sfml-audio-s-d sfml-graphics-s-d sfml-window-s-d sfml-network-s-d sfml-system-s-d opengl32 winmm gdi32 opengl32 freetype openal32 flac vorbisenc vorbisfile vorbis ogg ws2_32 Threads::Threads libImGui-SFML_d)
+        target_link_libraries(Game spdlog debug_assert imgui sfml-audio-s-d sfml-graphics-s-d sfml-window-s-d sfml-network-s-d sfml-system-s-d opengl32 winmm gdi32 opengl32 freetype openal32 flac vorbisenc vorbisfile vorbis ogg ws2_32 Threads::Threads libImGui-SFML_d)
     else()
-        target_link_libraries(Game imgui sfml-audio-d sfml-graphics-d sfml-window-d sfml-network-d sfml-system-d Threads::Threads libImGui-SFML_d)
+        target_link_libraries(Game spdlog debug_assert imgui sfml-audio-d sfml-graphics-d sfml-window-d sfml-network-d sfml-system-d Threads::Threads libImGui-SFML_d)
     endif()
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
         target_link_options(Game PRIVATE -mwindows)
     endif()
     if(${SFML_STATIC_LIBRARIES})
-        target_link_libraries(Game imgui sfml-audio-s sfml-graphics-s sfml-window-s sfml-network-s sfml-system-s opengl32 winmm gdi32 opengl32 freetype openal32 flac vorbisenc vorbisfile vorbis ogg ws2_32 Threads::Threads libImGui-SFML)
+        target_link_libraries(Game spdlog debug_assert imgui sfml-audio-s sfml-graphics-s sfml-window-s sfml-network-s sfml-system-s opengl32 winmm gdi32 opengl32 freetype openal32 flac vorbisenc vorbisfile vorbis ogg ws2_32 Threads::Threads libImGui-SFML)
     else()
-        target_link_libraries(Game imgui sfml-audio sfml-graphics sfml-window sfml-network sfml-system Threads::Threads libImGui-SFML)
+        target_link_libraries(Game spdlog debug_assert imgui sfml-audio sfml-graphics sfml-window sfml-network sfml-system Threads::Threads libImGui-SFML)
     endif()
 endif()
 
@@ -122,7 +168,6 @@ file(COPY ${data} DESTINATION data)
 
 # Make sure third-party libraries are built before executable
 add_dependencies(Game sfml)
-set_target_properties(Game PROPERTIES EXCLUDE_FROM_ALL TRUE)
 add_dependencies(imgui-sfml sfml)
 add_dependencies(imgui-sfml imgui)
 add_dependencies(Game imgui-sfml)

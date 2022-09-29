@@ -1,14 +1,14 @@
-#ifndef SPLASH_SCREEN_STATE_HPP
-#define SPLASH_SCREEN_STATE_HPP
+#ifndef TTT_SPLASH_SCREEN_STATE_HPP
+#define TTT_SPLASH_SCREEN_STATE_HPP
 
 #include "Core/CoreGameData.hpp"
 #include "Core/GameState.hpp"
 
 #include <SFML/Graphics.hpp>
 
-namespace he
+namespace ttt
 {
-    class SplashScreenState : public GameState
+    class SplashScreenState : public he::GameState
     {
     public:
         SplashScreenState();
@@ -24,7 +24,7 @@ namespace he
         void Resume();
 
     private:
-        CoreGameData* _coreGameData;
+        he::CoreGameData* _coreGameData;
 
         sf::Clock _clock;
 
@@ -32,6 +32,6 @@ namespace he
 
         sf::CircleShape _circleShape;
     };
-} // namespace he
+} // namespace ttt
 
-#endif // SPLASH_SCREEN_STATE_HPP
+#endif // TTT_SPLASH_SCREEN_STATE_HPP
