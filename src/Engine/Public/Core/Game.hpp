@@ -1,6 +1,7 @@
 #ifndef HE_GAME_HPP
 #define HE_GAME_HPP
 
+#include "AssetManager/Assets.hpp"
 #include "Core/CoreGameData.hpp"
 #include "Core/StateMachine.hpp"
 

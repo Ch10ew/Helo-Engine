@@ -1,6 +1,7 @@
 #ifndef TTT_SPLASH_SCREEN_STATE_HPP
 #define TTT_SPLASH_SCREEN_STATE_HPP
 
+#include "AssetManager/Assets.hpp"
 #include "Core/CoreGameData.hpp"
 #include "Core/GameState.hpp"
 
@@ -26,11 +27,17 @@ namespace ttt
     private:
         he::CoreGameData* _coreGameData;
 
-        sf::Clock _clock;
+        he::Assets* _assets;
 
+    private:
         const int SPLASH_TIME = 3000;
 
+    private:
         sf::CircleShape _circleShape;
+        sf::Sprite _test;
+
+    private:
+        sf::Clock _clock;
     };
 } // namespace ttt
 

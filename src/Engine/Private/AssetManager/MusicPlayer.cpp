@@ -1,4 +1,4 @@
-#include "AssetManager/MusicManager.hpp"
+#include "AssetManager/MusicPlayer.hpp"
 
 #include "FallbackResources/VineBoomOne.hpp"
 
@@ -11,41 +11,42 @@
 
 namespace he
 {
-    void MusicManager::Load(const std::string& filepath)
+    void MusicPlayer::Load(const std::string& id, const std::string& filepath)
     {
+        spdlog::info("[engine] MusicPlayer::Load(): Registering music '{0}' as id '{1}'", filepath, id);
+        this->_musicSources[id] = filepath;
+        spdlog::info("[engine] MusicPlayer::Load(): Registered music '{0}' as id '{1}'", filepath, id);
     }
-    /*void MusicManager::Load(const std::string& id, const std::string& filepath)
+
+    void MusicPlayer::Unload(const std::string& id)
     {
-        spdlog::critical("[engine] MusicManager::Load(): Attempting to load music '{0}' as id '{1}'", filepath, id);
-        std::unique_ptr<sf::Music> music = std::unique_ptr<sf::Music>(new sf::Music());
-        if (music->openFromFile(filepath))
+        if (_musicSources.find(id) != _musicSources.end())
         {
-            this->_assets[id] = std::move(music);
+            _musicSources.erase(_musicSources.find(id));
+            spdlog::info("[engine] MusicPlayer::Unload(): Unregistered music of id '{0}'", id);
+        }
+    }
+
+    void MusicPlayer::Use(const std::string& id)
+    {
+        if (_music.openFromFile(_musicSources[id]))
+        {
+            spdlog::info("[engine] MusicPlayer::Use(): Loaded music into Music instance '{0}'", _musicSources[id]);
         }
         else
         {
-            spdlog::critical("[engine] MusicManager::Load(): Failed to load music '{0}'", filepath);
-            music->openFromMemory(he::res::VINE_BOOM_ONE, he::res::VINE_BOOM_ONE_SIZE);
-            this->_assets[id] = std::move(music);
+            spdlog::critical("[engine] MusicPlayer::Use(): Failed to load music into Music instance '{0}'", _musicSources[id]);
+            _music.openFromMemory(he::res::VINE_BOOM_ONE, he::res::VINE_BOOM_ONE_SIZE);
         }
     }
 
-    void MusicManager::Unload(const std::string& id)
+    sf::Music& MusicPlayer::Get()
     {
-        if (_assets.find(id) != _assets.end())
-        {
-            _assets.erase(_assets.find(id));
-            spdlog::critical("[engine] MusicManager::Unload(): Unloaded music of id '{0}'", id);
-        }
+        return _music;
     }
 
-    sf::Music& MusicManager::Get(const std::string& id)
+    const sf::Music& MusicPlayer::Get() const
     {
-        return *(this->_assets.at(id));
+        return _music;
     }
-
-    const sf::Music& MusicManager::Get(const std::string& id) const
-    {
-        return *(this->_assets.at(id));
-    }*/
 } // namespace he

@@ -1,4 +1,4 @@
-/*#ifndef HE_SHADER_MANAGER_HPP
+#ifndef HE_SHADER_MANAGER_HPP
 #define HE_SHADER_MANAGER_HPP
 
 #include "AssetManager/AssetManagerBase.hpp"
@@ -15,8 +15,8 @@ namespace he
         void Load(const std::string& id, const std::string& filepath, sf::Shader::Type type);
         void Unload(const std::string& id);
         sf::Shader& Get(const std::string& id);
+        const sf::Shader& Get(const std::string& id) const;
     };
 } // namespace he
 
 #endif // HE_SHADER_MANAGER_HPP
-*/

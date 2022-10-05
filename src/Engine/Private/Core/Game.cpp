@@ -24,6 +24,8 @@ namespace he
         _coreGameData = CoreGameData::GetInstance();
         _coreGameData->window.create(sf::VideoMode(800, 600), title);
         _coreGameData->window.setFramerateLimit(_framerateLimit);
+
+        _view = _coreGameData->window.getDefaultView();
     }
 
     Game::Game(int width, int height, std::string title)
@@ -31,6 +33,8 @@ namespace he
         _coreGameData = CoreGameData::GetInstance();
         _coreGameData->window.create(sf::VideoMode(width, height), title);
         _coreGameData->window.setFramerateLimit(_framerateLimit);
+
+        _view = _coreGameData->window.getDefaultView();
     }
 
     void Game::SetInitialState(std::unique_ptr<GameState> state)
@@ -77,6 +81,11 @@ namespace he
                     {
                         _view.reset(sf::FloatRect(0, 0, event.size.width, event.size.height)); // Resizing based on 0, 0
                         //_view.setSize(sf::Vector2f(event.size.width, event.size.height)); // Resizing based on initial center
+                    }
+
+                    if (event.type == sf::Event::Closed)
+                    {
+                        _coreGameData->window.close();
                     }
 
                     _coreGameData->stateMachine.GetActiveState()->ProcessInput(event);

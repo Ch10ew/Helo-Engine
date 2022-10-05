@@ -9,20 +9,21 @@
 
 namespace he
 {
+    /**
+     * @brief Music Player to play BGMs.
+     */
     class MusicPlayer
     {
     public:
         void Load(const std::string& id, const std::string& filepath);
         void Unload(const std::string& id);
-        sf::Music& Get(const std::string& id);
-        const sf::Music& Get(const std::string& id) const;
-        const std::string& GetMusic(const std::string& id) const;
-        sf::SoundSource::Status GetStatus() const;
+        void Use(const std::string& id);
+        sf::Music& Get();
+        const sf::Music& Get() const;
 
     private:
-        std::map<std::string, std::string> _musicpaths;
+        std::map<std::string, std::string> _musicSources;
         sf::Music _music;
-        float _volume;
     };
 } // namespace he
 
