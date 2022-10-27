@@ -1,6 +1,8 @@
-#include "TicTacToe/SplashScreenState.hpp"
+#include "States/SplashScreenState.hpp"
+
 #include "AssetManager/Assets.hpp"
 #include "Core/CoreGameData.hpp"
+#include "States/PlayingState.hpp"
 
 #include <iostream>
 
@@ -24,9 +26,8 @@ namespace ttt
     {
         if (_clock.getElapsedTime().asMilliseconds() > SPLASH_TIME)
         {
-            //_coreGameData->stateMachine.AddState();
-            // std::cout << "Done" << std::endl;
-            _circleShape.setFillColor(sf::Color::Blue);
+            _coreGameData->stateMachine.AddState(std::unique_ptr<he::GameState>(new ttt::PlayingState()));
+            //_circleShape.setFillColor(sf::Color::Blue);
         }
     }
 

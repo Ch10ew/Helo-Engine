@@ -3,7 +3,7 @@
 #include "Core/CoreGameData.hpp"
 #include "Core/Game.hpp"
 #include "Core/GameState.hpp"
-#include "TicTacToe/SplashScreenState.hpp"
+#include "States/SplashScreenState.hpp"
 
 #include <memory>
 

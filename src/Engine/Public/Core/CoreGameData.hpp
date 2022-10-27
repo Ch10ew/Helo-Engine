@@ -1,6 +1,7 @@
 #ifndef HE_CORE_GAME_DATA_HPP
 #define HE_CORE_GAME_DATA_HPP
 
+#include "Core/EntityManager.hpp"
 #include "Core/StateMachine.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -56,6 +57,11 @@ namespace he
          * State machine for the game (See StateMachine). Manages the active state and manages state changes in the game.
          */
         StateMachine stateMachine;
+
+        /**
+         * Entity manager for the game. Manages entities, components and systems in the game.
+         */
+        EntityManager entityManager;
 
     protected:
         /**

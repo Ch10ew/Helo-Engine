@@ -13,18 +13,74 @@ namespace he
     class GameState
     {
     public:
+        /**
+         * Game State default constructor
+         */
         GameState(){};
+
+        /**
+         * Disabled Copy Constructor
+         */
         GameState(const GameState&) = delete;
+
+        /**
+         * Disabled assignment operator
+         */
         GameState& operator=(const GameState&) = delete;
 
     public:
+        /**
+         * Function that will be called within the main game loop.
+         *
+         * Called during the input step of the main game loop.
+         *
+         * Steps in the main game loop consists of: input, update, render
+         */
         virtual void ProcessInput(sf::Event) = 0;
+
+        /**
+         * Function that will be called within the main game loop.
+         *
+         * Called during the update step of the main game loop.
+         *
+         * Steps in the main game loop consists of: input, update, render
+         */
         virtual void Update(float) = 0;
-        virtual void Render(float) = 0;
+
+        /**
+         * Function that will be called within the main game loop.
+         *
+         * For physics based updates which needs fixed timesteps.
+         *
+         * Called during the update step of the main game loop.
+         *
+         * Steps in the main game loop consists of: input, update, render
+         */
+        virtual void FixedUpdate(float){};
+
+        /**
+         * Function that will be called within the main game loop.
+         *
+         * Called during the render step of the main game loop.
+         *
+         * Steps in the main game loop consists of: input, update, render
+         */
+        virtual void Render() = 0;
 
     public:
+        /**
+         * Initialization to be carried out for the state. Favor this function for dynamic objects.
+         */
         virtual void Init() = 0;
+
+        /**
+         * Actions to be taken when the state is paused.
+         */
         virtual void Pause(){};
+
+        /**
+         * Actions to be taken when the state is resumed.
+         */
         virtual void Resume(){};
     };
 } // namespace he

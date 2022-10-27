@@ -1,7 +1,7 @@
 #include "Core/Game.hpp"
 
 #include "Core/CoreGameData.hpp"
-#include "TicTacToe/SplashScreenState.hpp"
+#include "States/SplashScreenState.hpp"
 
 #include <spdlog/spdlog.h>
 
@@ -54,6 +54,34 @@ namespace he
             // State changes
             _coreGameData->stateMachine.ProcessStateChanges();
 
+#pragma region Input
+
+            sf::Event event;
+            while (_coreGameData->window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Resized)
+                {
+                    _view.reset(sf::FloatRect(0, 0, event.size.width, event.size.height)); // Resizing based on 0, 0
+                    //_view.setSize(sf::Vector2f(event.size.width, event.size.height)); // Resizing based on initial center
+                }
+
+                if (event.type == sf::Event::Closed)
+                {
+                    _coreGameData->window.close();
+                }
+
+                _coreGameData->stateMachine.GetActiveState()->ProcessInput(event);
+            }
+
+#pragma endregion
+
+#pragma region Update
+
+            _coreGameData->stateMachine.GetActiveState()->Update(_timestep);
+            _coreGameData->window.setView(_view);
+
+#pragma endregion
+
             float newTime = this->_clock.getElapsedTime().asSeconds();
             float frameTime = newTime - currentTime;
             if (frameTime > 0.25f)
@@ -66,49 +94,18 @@ namespace he
             while (accumulator >= _timestep)
             {
 
-#pragma region State changes
+#pragma region Physics Update
 
-                _coreGameData->stateMachine.ProcessStateChanges();
-
-#pragma endregion
-
-#pragma region Input
-
-                sf::Event event;
-                while (_coreGameData->window.pollEvent(event))
-                {
-                    if (event.type == sf::Event::Resized)
-                    {
-                        _view.reset(sf::FloatRect(0, 0, event.size.width, event.size.height)); // Resizing based on 0, 0
-                        //_view.setSize(sf::Vector2f(event.size.width, event.size.height)); // Resizing based on initial center
-                    }
-
-                    if (event.type == sf::Event::Closed)
-                    {
-                        _coreGameData->window.close();
-                    }
-
-                    _coreGameData->stateMachine.GetActiveState()->ProcessInput(event);
-                }
-
-#pragma endregion
-
-#pragma region Update
-
-                _coreGameData->window.setView(_view);
-                _coreGameData->stateMachine.GetActiveState()->Update(_timestep);
+                _coreGameData->stateMachine.GetActiveState()->FixedUpdate(_timestep);
 
 #pragma endregion
 
                 accumulator -= _timestep;
             }
 
-            // [0, 1] | How much to interpolate from previous state to get to the current state
-            const float interpolation = accumulator / _timestep;
-
 #pragma region Display
 
-            _coreGameData->stateMachine.GetActiveState()->Render(_timestep);
+            _coreGameData->stateMachine.GetActiveState()->Render();
 
 #pragma endregion
         }

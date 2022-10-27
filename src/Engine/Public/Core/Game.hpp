@@ -94,6 +94,10 @@ namespace he
          */
         sf::Clock _clock;
 
+        /**
+         * SFML View instance for the window.
+         *
+         */
         sf::View _view;
 
 #pragma endregion

@@ -1,18 +1,19 @@
-#ifndef TTT_SPLASH_SCREEN_STATE_HPP
-#define TTT_SPLASH_SCREEN_STATE_HPP
+#ifndef TTT_PLAYING_STATE_HPP
+#define TTT_PLAYING_STATE_HPP
 
 #include "AssetManager/Assets.hpp"
 #include "Core/CoreGameData.hpp"
 #include "Core/GameState.hpp"
+#include "TicTacToe/Board.hpp"
 
 #include <SFML/Graphics.hpp>
 
 namespace ttt
 {
-    class SplashScreenState : public he::GameState
+    class PlayingState : public he::GameState
     {
     public:
-        SplashScreenState();
+        PlayingState();
 
     public:
         void ProcessInput(sf::Event event);
@@ -26,19 +27,18 @@ namespace ttt
 
     private:
         he::CoreGameData* _coreGameData;
-
         he::Assets* _assets;
 
     private:
-        const int SPLASH_TIME = 3000;
+        Board _board;
 
     private:
-        sf::CircleShape _circleShape;
-        sf::Sprite _test;
+        sf::Sprite _piece;
+        ttt::Piece _yourPiece;
 
     private:
         sf::Clock _clock;
     };
 } // namespace ttt
 
-#endif // TTT_SPLASH_SCREEN_STATE_HPP
+#endif // TTT_PLAYING_STATE_HPP
