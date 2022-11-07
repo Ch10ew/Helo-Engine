@@ -26,12 +26,16 @@ namespace ttt
     {
         if (_clock.getElapsedTime().asMilliseconds() > SPLASH_TIME)
         {
-            _coreGameData->stateMachine.AddState(std::unique_ptr<he::GameState>(new ttt::PlayingState()));
-            //_circleShape.setFillColor(sf::Color::Blue);
+            //_coreGameData->stateMachine.AddState(std::unique_ptr<he::GameState>(new ttt::PlayingState()));
+            _circleShape.setFillColor(sf::Color::Blue);
         }
     }
 
-    void SplashScreenState::Render(float dt)
+    void SplashScreenState::FixedUpdate(float dt)
+    {
+    }
+
+    void SplashScreenState::Render()
     {
         _coreGameData->window.clear(sf::Color::White);
         _coreGameData->window.draw(_test);

@@ -14,7 +14,11 @@ namespace ttt
     {
     }
 
-    void PlayingState::Render(float dt)
+    void PlayingState::FixedUpdate(float dt)
+    {
+    }
+
+    void PlayingState::Render()
     {
     }
 

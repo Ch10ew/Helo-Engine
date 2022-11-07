@@ -18,7 +18,8 @@ namespace ttt
     public:
         void ProcessInput(sf::Event event);
         void Update(float dt);
-        void Render(float dt);
+        void FixedUpdate(float dt);
+        void Render();
 
     public:
         void Init();
