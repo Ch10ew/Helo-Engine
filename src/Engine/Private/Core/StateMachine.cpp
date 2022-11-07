@@ -1,6 +1,9 @@
 #include "Core/StateMachine.hpp"
 
-#include "debug_assert.hpp"
+#include <aixlog.hpp>
+#include <debug_assert.hpp>
+
+#include <cxxabi.h>
 
 namespace he
 {
@@ -17,11 +20,16 @@ namespace he
         _isAdding = true;
         _isReplacing = isReplacing;
         _newState = std::move(newState);
+
+        int status;
+        LOG(INFO) << (_isReplacing ? "Replacing" : "Adding")
+                  << " state: " << typeid(*(_newState.get())).name() << "\n";
     }
 
     void StateMachine::RemoveState()
     {
         _isRemoving = true;
+        LOG(INFO) << "Removing state " << typeid(*(_states.top().get())).name() << "\n";
     }
 
     StateMachine::GameStateUniquePtr& StateMachine::GetActiveState()
