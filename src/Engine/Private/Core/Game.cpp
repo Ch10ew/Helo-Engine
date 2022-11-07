@@ -3,7 +3,7 @@
 #include "Core/CoreGameData.hpp"
 #include "States/SplashScreenState.hpp"
 
-#include <spdlog/spdlog.h>
+#include <aixlog.hpp>
 
 #include <memory>
 #include <string>
@@ -12,6 +12,8 @@ namespace he
 {
     Game::Game()
     {
+        AixLog::Log::init<AixLog::SinkCout>(AixLog::Severity::trace); // Init logger
+
         _coreGameData = CoreGameData::GetInstance();
         _coreGameData->window.create(sf::VideoMode(800, 600), "title");
         _coreGameData->window.setFramerateLimit(_framerateLimit);
@@ -21,6 +23,8 @@ namespace he
 
     Game::Game(std::string title)
     {
+        AixLog::Log::init<AixLog::SinkCout>(AixLog::Severity::trace); // Init logger
+
         _coreGameData = CoreGameData::GetInstance();
         _coreGameData->window.create(sf::VideoMode(800, 600), title);
         _coreGameData->window.setFramerateLimit(_framerateLimit);
@@ -30,6 +34,8 @@ namespace he
 
     Game::Game(int width, int height, std::string title)
     {
+        AixLog::Log::init<AixLog::SinkCout>(AixLog::Severity::trace); // Init logger
+
         _coreGameData = CoreGameData::GetInstance();
         _coreGameData->window.create(sf::VideoMode(width, height), title);
         _coreGameData->window.setFramerateLimit(_framerateLimit);
@@ -39,13 +45,13 @@ namespace he
 
     void Game::SetInitialState(std::unique_ptr<GameState> state)
     {
-        spdlog::info("[engine] Game::SetInitialState(): State set");
+        LOG(INFO) << "State set\n";
         _coreGameData->stateMachine.AddState(std::move(state));
     }
 
     void Game::Run()
     {
-        spdlog::info("[engine] Game::Run(): Main game loop starting...");
+        LOG(INFO) << "Main game loop starting...\n";
         float currentTime = this->_clock.getElapsedTime().asSeconds();
         float accumulator = 0.0f;
 

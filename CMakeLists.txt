@@ -77,20 +77,20 @@ add_library(debug_assert INTERFACE)
 
 
 
-# Get spdlog library from GitHub
+# Get aixlog library from GitHub
 include(ExternalProject)
-ExternalProject_Add(spdlog-external
-    PREFIX "${CMAKE_BINARY_DIR}/lib"
-    GIT_REPOSITORY "https://github.com/gabime/spdlog.git"
-    GIT_TAG "v1.x"
-    SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/lib/spdlog"
-    DOWNLOAD_DIR "${CMAKE_CURRENT_BINARY_DIR}/lib/spdlog"
-    BUILD_COMMAND ""
-    INSTALL_COMMAND ""
-    CONFIGURE_COMMAND ""
+ExternalProject_Add(aixlog-external
+        URL https://raw.githubusercontent.com/badaix/aixlog/master/include/aixlog.hpp
+        SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/lib/aixlog"
+        DOWNLOAD_DIR "${CMAKE_CURRENT_BINARY_DIR}/lib/aixlog"
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ""
+        CONFIGURE_COMMAND ""
+        DOWNLOAD_NO_EXTRACT TRUE
+        DOWNLOAD_NAME "aixlog.hpp"
 )
 
-add_library(spdlog INTERFACE)
+add_library(aixlog INTERFACE)
 
 
 
@@ -106,8 +106,8 @@ link_directories(${CMAKE_BINARY_DIR}/lib/imgui/${CMAKE_INSTALL_LIBDIR})
 include_directories(${CMAKE_BINARY_DIR}/lib/imgui/${CMAKE_INSTALL_INCLUDEDIR})
 link_directories(${CMAKE_BINARY_DIR}/lib/imgui-sfml/${CMAKE_INSTALL_LIBDIR})
 include_directories(${CMAKE_BINARY_DIR}/lib/imgui-sfml/${CMAKE_INSTALL_INCLUDEDIR})
-link_directories(${CMAKE_BINARY_DIR}/lib/spdlog/${CMAKE_INSTALL_LIBDIR})
-include_directories(${CMAKE_BINARY_DIR}/lib/spdlog/${CMAKE_INSTALL_INCLUDEDIR})
+link_directories(${CMAKE_BINARY_DIR}/lib/aixlog/${CMAKE_INSTALL_LIBDIR})
+include_directories(${CMAKE_BINARY_DIR}/lib/aixlog/${CMAKE_INSTALL_INCLUDEDIR})
 
 # This is required for SFML
 find_package(OpenGL REQUIRED)
@@ -125,9 +125,9 @@ target_include_directories(imgui SYSTEM INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/li
 add_dependencies(debug_assert debug_assert-external)
 target_include_directories(debug_assert SYSTEM INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/lib/debug_assert)
 
-# Set up spdlog library
-add_dependencies(spdlog spdlog-external)
-target_include_directories(spdlog SYSTEM INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/lib/spdlog/include/spdlog)
+# Set up aixlog library
+add_dependencies(aixlog aixlog-external)
+target_include_directories(aixlog SYSTEM INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/lib/aixlog)
 
 
 
@@ -143,18 +143,18 @@ add_executable(Game ${sources})
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     if(${SFML_STATIC_LIBRARIES})
-        target_link_libraries(Game spdlog debug_assert imgui sfml-audio-s-d sfml-graphics-s-d sfml-window-s-d sfml-network-s-d sfml-system-s-d opengl32 winmm gdi32 opengl32 freetype openal32 flac vorbisenc vorbisfile vorbis ogg ws2_32 Threads::Threads libImGui-SFML_d)
+        target_link_libraries(Game aixlog debug_assert imgui sfml-audio-s-d sfml-graphics-s-d sfml-window-s-d sfml-network-s-d sfml-system-s-d opengl32 winmm gdi32 opengl32 freetype openal32 flac vorbisenc vorbisfile vorbis ogg ws2_32 Threads::Threads libImGui-SFML_d)
     else()
-        target_link_libraries(Game spdlog debug_assert imgui sfml-audio-d sfml-graphics-d sfml-window-d sfml-network-d sfml-system-d Threads::Threads libImGui-SFML_d)
+        target_link_libraries(Game aixlog debug_assert imgui sfml-audio-d sfml-graphics-d sfml-window-d sfml-network-d sfml-system-d Threads::Threads libImGui-SFML_d)
     endif()
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
         target_link_options(Game PRIVATE -mwindows)
     endif()
     if(${SFML_STATIC_LIBRARIES})
-        target_link_libraries(Game spdlog debug_assert imgui sfml-audio-s sfml-graphics-s sfml-window-s sfml-network-s sfml-system-s opengl32 winmm gdi32 opengl32 freetype openal32 flac vorbisenc vorbisfile vorbis ogg ws2_32 Threads::Threads libImGui-SFML)
+        target_link_libraries(Game aixlog debug_assert imgui sfml-audio-s sfml-graphics-s sfml-window-s sfml-network-s sfml-system-s opengl32 winmm gdi32 opengl32 freetype openal32 flac vorbisenc vorbisfile vorbis ogg ws2_32 Threads::Threads libImGui-SFML)
     else()
-        target_link_libraries(Game spdlog debug_assert imgui sfml-audio sfml-graphics sfml-window sfml-network sfml-system Threads::Threads libImGui-SFML)
+        target_link_libraries(Game aixlog debug_assert imgui sfml-audio sfml-graphics sfml-window sfml-network sfml-system Threads::Threads libImGui-SFML)
     endif()
 endif()
 

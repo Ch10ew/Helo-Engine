@@ -3,7 +3,7 @@
 #include "FallbackResources/VineBoomOne.hpp"
 
 #include <SFML/Audio.hpp>
-#include <spdlog/spdlog.h>
+#include <aixlog.hpp>
 
 #include <iostream>
 #include <memory>
@@ -13,9 +13,9 @@ namespace he
 {
     void MusicPlayer::Load(const std::string& id, const std::string& filepath)
     {
-        spdlog::info("[engine] MusicPlayer::Load(): Registering music '{0}' as id '{1}'", filepath, id);
+        LOG(INFO) << "Registering music '" << filepath << "' as id '" << id << "'\n";
         this->_musicSources[id] = filepath;
-        spdlog::info("[engine] MusicPlayer::Load(): Registered music '{0}' as id '{1}'", filepath, id);
+        LOG(INFO) << "Registered music '" << filepath << "' as id '" << id << "'\n";
     }
 
     void MusicPlayer::Unload(const std::string& id)
@@ -23,7 +23,7 @@ namespace he
         if (_musicSources.find(id) != _musicSources.end())
         {
             _musicSources.erase(_musicSources.find(id));
-            spdlog::info("[engine] MusicPlayer::Unload(): Unregistered music of id '{0}'", id);
+            LOG(INFO) << "Unregistered music of id '" << id << "'\n";
         }
     }
 
@@ -31,11 +31,11 @@ namespace he
     {
         if (_music.openFromFile(_musicSources[id]))
         {
-            spdlog::info("[engine] MusicPlayer::Use(): Loaded music into Music instance '{0}'", _musicSources[id]);
+            LOG(INFO) << "Loaded music into Music instance '" << _musicSources[id] << "'\n";
         }
         else
         {
-            spdlog::critical("[engine] MusicPlayer::Use(): Failed to load music into Music instance '{0}'", _musicSources[id]);
+            LOG(WARNING) << "Failed to load music into Music instance '" << _musicSources[id] << "'\n";
             _music.openFromMemory(he::res::VINE_BOOM_ONE, he::res::VINE_BOOM_ONE_SIZE);
         }
     }

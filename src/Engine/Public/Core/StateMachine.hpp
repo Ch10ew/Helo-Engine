@@ -3,8 +3,8 @@
 
 #include "Core/GameState.hpp"
 
+#include <aixlog.hpp>
 #include <debug_assert.hpp>
-#include <spdlog/spdlog.h>
 
 #include <iostream>
 #include <memory>
@@ -115,7 +115,7 @@ namespace he
         {
             static void handle(const debug_assert::source_location& loc, const char* expression) noexcept
             {
-                spdlog::error("[debug assert] {0}:{1}: Assertion '{2}' failed.", loc.file_name, loc.line_number, expression);
+                LOG(ERROR) << "[debug assert] " << loc.file_name << ":" << loc.line_number << ": Assertion '" << expression << "' failed.";
                 exit(EXIT_FAILURE);
             }
         };

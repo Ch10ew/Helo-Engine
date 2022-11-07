@@ -3,7 +3,7 @@
 #include "FallbackResources/SwirlShader.hpp"
 
 #include <SFML/Graphics.hpp>
-#include <spdlog/spdlog.h>
+#include <aixlog.hpp>
 
 #include <iostream>
 #include <memory>
@@ -13,16 +13,16 @@ namespace he
 {
     void ShaderManager::Load(const std::string& id, const std::string& filepath, sf::Shader::Type type)
     {
-        spdlog::info("[engine] ShaderManager::Load(): Attempting to load shader '{0}' as id '{1}'", filepath, id);
+        LOG(INFO) << "Attempting to load shader '" << filepath << "' as id '" << id << "'\n";
         std::unique_ptr<sf::Shader> shader;
         if (shader->loadFromFile(filepath, type))
         {
             this->_assets[id] = std::move(shader);
-            spdlog::info("[engine] ShaderManager::Load(): Loaded shader '{0}' as id '{1}'", filepath, id);
+            LOG(INFO) << "Loaded shader '" << filepath << "' as id '" << id << "'\n";
         }
         else
         {
-            spdlog::critical("[engine] ShaderManager::Load(): Failed to load shader '{0}'", filepath);
+            LOG(WARNING) << "Failed to load shader '" << filepath << "'\n";
             shader->loadFromMemory(he::res::SWIRL_SHADER_STRING, sf::Shader::Type::Vertex);
             this->_assets[id] = std::move(shader);
         }
@@ -33,7 +33,7 @@ namespace he
         if (_assets.find(id) != _assets.end())
         {
             _assets.erase(_assets.find(id));
-            spdlog::info("[engine] ShaderManager::Unload(): Unloaded shader of id '{0}'", id);
+            LOG(INFO) << "Unloaded shader of id '" << id << "'\n";
         }
     }
 

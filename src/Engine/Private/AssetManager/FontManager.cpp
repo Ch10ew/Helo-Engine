@@ -3,7 +3,7 @@
 #include "FallbackResources/ArialBlack.hpp"
 
 #include <SFML/Graphics.hpp>
-#include <spdlog/spdlog.h>
+#include <aixlog.hpp>
 
 #include <iostream>
 #include <memory>
@@ -13,16 +13,16 @@ namespace he
 {
     void FontManager::Load(const std::string& id, const std::string& filepath)
     {
-        spdlog::info("[engine] FontManager::Load(): Attempting to load font '{0}' as id '{1}'", filepath, id);
+        LOG(INFO) << "Attempting to load font '" << filepath << "' as id '" << id << "'\n";
         std::unique_ptr<sf::Font> font = std::unique_ptr<sf::Font>(new sf::Font());
         if (font->loadFromFile(filepath))
         {
             this->_assets[id] = std::move(font);
-            spdlog::info("[engine] FontManager::Load(): Loaded font '{0}' as id '{1}'", filepath, id);
+            LOG(INFO) << "Loaded font '" << filepath << "' as id '" << id << "'\n";
         }
         else
         {
-            spdlog::critical("[engine] FontManager::Load(): Failed to load font '{0}'", filepath);
+            LOG(WARNING) << "Failed to load font '" << filepath << "'\n";
             font->loadFromMemory(he::res::FONT_ARIAL_BLACK, he::res::FONT_ARIAL_BLACK_SIZE);
             this->_assets[id] = std::move(font);
         }
@@ -33,7 +33,7 @@ namespace he
         if (_assets.find(id) != _assets.end())
         {
             _assets.erase(_assets.find(id));
-            spdlog::info("[engine] FontManager::Unload(): Unloaded font of id '{0}'", id);
+            LOG(INFO) << "Unloaded font of id '" << id << "'\n";
         }
     }
 

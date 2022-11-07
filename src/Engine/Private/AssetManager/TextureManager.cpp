@@ -1,7 +1,7 @@
 #include "AssetManager/TextureManager.hpp"
 
 #include <SFML/Graphics.hpp>
-#include <spdlog/spdlog.h>
+#include <aixlog.hpp>
 
 #include <iostream>
 #include <memory>
@@ -11,16 +11,16 @@ namespace he
 {
     void TextureManager::Load(const std::string& id, const std::string& filepath)
     {
-        spdlog::info("[engine] TextureManager::Load(): Attempting to load texture '{0}' as id '{1}'", filepath, id);
+        LOG(INFO) << "Attempting to load texture '" << filepath << "' as id '" << id << "'\n";
         std::unique_ptr<sf::Texture> texture = std::unique_ptr<sf::Texture>(new sf::Texture());
         if (texture->loadFromFile(filepath))
         {
             this->_assets[id] = std::move(texture);
-            spdlog::info("[engine] TextureManager::Load(): Loaded texture '{0}' as id '{1}'", filepath, id);
+            LOG(INFO) << "Loaded texture '" << filepath << "' as id '" << id << "'\n";
         }
         else
         {
-            spdlog::critical("[engine] TextureManager::Load(): Failed to load texture '{0}'", filepath);
+            LOG(WARNING) << "Failed to load texture '" << filepath << "'\n";
             sf::Image missingTextureImage;
             missingTextureImage.create(40, 40, sf::Color::Magenta);
 
@@ -34,7 +34,7 @@ namespace he
         if (_assets.find(id) != _assets.end())
         {
             _assets.erase(_assets.find(id));
-            spdlog::info("[engine] TextureManager::Unload(): Unloaded texture of id '{0}'", id);
+            LOG(INFO) << "Unloaded texture of id '" << id << "'\n";
         }
     }
 

@@ -6,6 +6,7 @@
 #include "Core/StateMachine.hpp"
 
 #include <SFML/Graphics.hpp>
+#include <aixlog.hpp>
 
 #include <memory>
 #include <string>

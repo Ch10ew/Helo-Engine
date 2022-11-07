@@ -3,7 +3,7 @@
 #include "FallbackResources/VineBoomOne.hpp"
 
 #include <SFML/Graphics.hpp>
-#include <spdlog/spdlog.h>
+#include <aixlog.hpp>
 
 #include <iostream>
 #include <memory>
@@ -14,16 +14,16 @@ namespace he
 {
     void SoundManager::Load(const std::string& id, const std::string& filepath)
     {
-        spdlog::info("[engine] SoundManager::Load(): Attempting to load sound '{0}' as id '{1}'", filepath, id);
+        LOG(INFO) << "Attempting to load sound '" << filepath << "' as id '" << id << "'\n";
         std::unique_ptr<sf::SoundBuffer> soundBuffer;
         if (soundBuffer->loadFromFile(filepath))
         {
             this->_assets[id] = std::move(soundBuffer);
-            spdlog::info("[engine] SoundManager::Load(): Loaded sound '{0}' as id '{1}'", filepath, id);
+            LOG(INFO) << "Loaded sound '" << filepath << "' as id '" << id << "'\n";
         }
         else
         {
-            spdlog::critical("[engine] SoundManager::Load(): Failed to load sound '{0}'", filepath);
+            LOG(WARNING) << "Failed to load sound '" << filepath << "'\n";
             soundBuffer->loadFromMemory(he::res::VINE_BOOM_ONE, he::res::VINE_BOOM_ONE_SIZE);
             this->_assets[id] = std::move(soundBuffer);
         }
@@ -34,7 +34,7 @@ namespace he
         if (_assets.find(id) != _assets.end())
         {
             _assets.erase(_assets.find(id));
-            spdlog::info("[engine] SoundManager::Unload(): Unloaded sound of id '{0}'", id);
+            LOG(INFO) << "Unloaded sound of id '" << id << "'\n";
         }
     }
 
