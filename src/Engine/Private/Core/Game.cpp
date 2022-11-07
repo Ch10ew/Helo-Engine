@@ -45,8 +45,8 @@ namespace he
 
     void Game::SetInitialState(std::unique_ptr<GameState> state)
     {
-        LOG(INFO) << "State set\n";
-        _coreGameData->stateMachine.AddState(std::move(state));
+        LOG(INFO) << "Setting initial state...\n";
+        _coreGameData->stateMachine.AddState(std::move(state), false);
     }
 
     void Game::Run()

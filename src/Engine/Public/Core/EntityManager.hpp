@@ -1,21 +1,25 @@
 #ifndef HE_ENTITY_MANAGER_HPP
 #define HE_ENTITY_MANAGER_HPP
 
-#include <memory>
-#include <vector>
-
 #include "Core/Component.hpp"
 #include "Core/Entity.hpp"
-#include "Core/System.hpp"
+
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace he
 {
     class EntityManager
     {
     public:
-        std::vector<std::unique_ptr<Entity>> entities;
-        std::vector<std::unique_ptr<System>> systems;
-        std::vector<std::shared_ptr<Component>> components;
+        std::vector<Entity> entities;
+        std::vector<std::unique_ptr<Component>> components;
+
+    public:
+        // TODO: experiment with type_id and derived pointers
+        GetEntitiesO();
     };
 } // namespace he
 

@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Core/EntityManager.hpp"
+
 namespace he
 {
     /**
@@ -12,6 +14,12 @@ namespace he
      */
     class GameState
     {
+    public:
+        /**
+         * EntityManager of the scene
+         */
+        EntityManager entityManager;
+
     public:
         /**
          * Game State default constructor
@@ -45,7 +53,7 @@ namespace he
          *
          * Steps in the main game loop consists of: input, update, render
          */
-        virtual void Update(float) = 0;
+        virtual void Update(float);
 
         /**
          * Function that will be called within the main game loop.
