@@ -2,6 +2,7 @@
 #define HE_SPRITE_RENDERER_COMPONENT_HPP
 
 #include "Core/Component.hpp"
+#include "Core/EntityManager.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -11,6 +12,14 @@ namespace he
     {
     public:
         sf::Sprite* sprite;
+
+    public:
+        void Init();
+        void Update(float dt);
+        void FixedUpdate(float dt);
+
+    private:
+        EntityManager* entityManager;
     };
 } // namespace he
 

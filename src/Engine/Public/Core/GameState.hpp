@@ -16,12 +16,6 @@ namespace he
     {
     public:
         /**
-         * EntityManager of the scene
-         */
-        EntityManager entityManager;
-
-    public:
-        /**
          * Game State default constructor
          */
         GameState(){};
@@ -64,7 +58,7 @@ namespace he
          *
          * Steps in the main game loop consists of: input, update, render
          */
-        virtual void FixedUpdate(float){};
+        virtual void FixedUpdate(float);
 
         /**
          * Function that will be called within the main game loop.

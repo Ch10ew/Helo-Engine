@@ -83,6 +83,7 @@ namespace he
 
 #pragma region Update
 
+            _coreGameData->stateMachine.GetActiveState()->GameState::Update(_timestep);
             _coreGameData->stateMachine.GetActiveState()->Update(_timestep);
             _coreGameData->window.setView(_view);
 
@@ -102,6 +103,7 @@ namespace he
 
 #pragma region Physics Update
 
+                _coreGameData->stateMachine.GetActiveState()->GameState::FixedUpdate(_timestep);
                 _coreGameData->stateMachine.GetActiveState()->FixedUpdate(_timestep);
 
 #pragma endregion

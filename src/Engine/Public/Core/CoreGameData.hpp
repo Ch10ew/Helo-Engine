@@ -57,6 +57,11 @@ namespace he
          */
         StateMachine stateMachine;
 
+        /**
+         * EntityManager of the game.
+         */
+        EntityManager entityManager;
+
     protected:
         /**
          * The instance of the singleton.

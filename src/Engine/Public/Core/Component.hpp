@@ -17,6 +17,11 @@ namespace he
          */
         std::string id;
 
+        /**
+         * Update priority for the Component
+         */
+        int priority;
+
     public:
         /**
          * Disabled Default Constructor.
@@ -32,8 +37,8 @@ namespace he
 
     public:
         virtual void Init(){};
-        virtual void Update(){};
-        virtual void FixedUpdate(){};
+        virtual void Update(float){};
+        virtual void FixedUpdate(float){};
     };
 } // namespace he
 
