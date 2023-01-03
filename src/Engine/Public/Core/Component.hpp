@@ -13,17 +13,6 @@ namespace he
     {
     public:
         /**
-         * Unique identifier for the Component
-         */
-        std::string id;
-
-        /**
-         * Update priority for the Component
-         */
-        int priority;
-
-    public:
-        /**
          * Disabled Default Constructor.
          */
         Component() = delete;
@@ -36,8 +25,30 @@ namespace he
         Component(std::string id);
 
     public:
+        /**
+         * Unique identifier for the Component
+         */
+        std::string id;
+
+        /**
+         * Update priority for the Component
+         */
+        int priority = 0;
+
+    public:
+        /**
+         * Initialize the component.
+         */
         virtual void Init(){};
+
+        /**
+         * Update function. Called every frame.
+         */
         virtual void Update(float){};
+
+        /**
+         * Fixed update function. Called every 1/60 seconds.
+         */
         virtual void FixedUpdate(float){};
     };
 } // namespace he

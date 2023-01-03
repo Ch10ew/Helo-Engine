@@ -34,15 +34,6 @@ namespace he
         /**
          * Function that will be called within the main game loop.
          *
-         * Called during the input step of the main game loop.
-         *
-         * Steps in the main game loop consists of: input, update, render
-         */
-        virtual void ProcessInput(sf::Event) = 0;
-
-        /**
-         * Function that will be called within the main game loop.
-         *
          * Called during the update step of the main game loop.
          *
          * Steps in the main game loop consists of: input, update, render
@@ -59,15 +50,6 @@ namespace he
          * Steps in the main game loop consists of: input, update, render
          */
         virtual void FixedUpdate(float);
-
-        /**
-         * Function that will be called within the main game loop.
-         *
-         * Called during the render step of the main game loop.
-         *
-         * Steps in the main game loop consists of: input, update, render
-         */
-        virtual void Render() = 0;
 
     public:
         /**

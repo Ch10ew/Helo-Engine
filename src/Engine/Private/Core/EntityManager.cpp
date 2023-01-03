@@ -1,15 +1,87 @@
 #include "Core/EntityManager.hpp"
 
+#include "Core/Entity.hpp"
+
 #include <algorithm>
 #include <map>
 #include <memory>
 #include <set>
 #include <typeinfo>
 
+#include <iostream>
+
 namespace he
 {
     // TODO: unit tests
-    bool EntityManager::AddComponent(std::unique_ptr<Component> component)
+    void EntityManager::Clear()
+    {
+        entities.clear();
+        components.clear();
+    }
+
+    bool EntityManager::AddEntity(std::shared_ptr<Entity> entity)
+    {
+        for (auto& e : entities)
+        {
+            if (e->id == entity->id)
+            {
+                return false;
+            }
+        }
+
+        entities.push_back(entity);
+        return true;
+    }
+
+    bool EntityManager::RemoveEntity(std::string id)
+    {
+        size_t before = entities.size();
+        entities.erase(std::remove_if(
+                           entities.begin(), entities.end(),
+                           [&](const auto& e)
+                           {
+                               return e->id == id;
+                           }),
+                       entities.end());
+
+        return !(before == entities.size());
+    }
+
+    Entity* EntityManager::GetOwningEntity(Component* component)
+    {
+        if (!component)
+        {
+            return nullptr;
+        }
+
+        for (auto& entity : entities)
+        {
+            for (auto& tmpComponent : entity->components)
+            {
+                if (tmpComponent == component)
+                {
+                    return entity.get();
+                }
+            }
+        }
+
+        return nullptr;
+    }
+
+    Component* EntityManager::GetComponentById(std::string id)
+    {
+        for (auto& component : components)
+        {
+            if (component->id == id)
+            {
+                return component.get();
+            }
+        }
+
+        return nullptr;
+    }
+
+    bool EntityManager::AddComponent(std::shared_ptr<Component> component)
     {
         for (auto& c : components)
         {
@@ -20,6 +92,7 @@ namespace he
         }
 
         components.push_back(std::move(component));
+        SortComponents();
         return true;
     }
 
@@ -47,7 +120,7 @@ namespace he
         }
 
         // sort in tmp vector
-        std::vector<std::unique_ptr<Component>> tmpComponents;
+        std::vector<std::shared_ptr<Component>> tmpComponents;
         for (auto kvit = priorityComponentHashMap.rbegin(); kvit != priorityComponentHashMap.rend(); kvit++)
         {
             for (int x = 0; x < components.size(); ++x)
@@ -66,26 +139,5 @@ namespace he
         {
             components.push_back(std::move(component));
         }
-    }
-
-    Entity* EntityManager::GetOwningEntity(Component* component)
-    {
-        if (!component)
-        {
-            return nullptr;
-        }
-
-        for (auto& entity : entities)
-        {
-            for (auto& tmpComponent : entity.components)
-            {
-                if (tmpComponent == component)
-                {
-                    return &entity;
-                }
-            }
-        }
-
-        return nullptr;
     }
 } // namespace he

@@ -58,9 +58,19 @@ namespace he
         StateMachine stateMachine;
 
         /**
-         * EntityManager of the game.
+         * EntityManager of the game. Add game entities into the entities attribute of this variable.
          */
         EntityManager entityManager;
+
+        /**
+         * Events in the game. Will only change when new events are polled.
+         */
+        sf::Event event;
+
+        /**
+         * Boolean for if any events are polled this frame.
+         */
+        bool eventPolledCurrentFrame = false;
 
     protected:
         /**

@@ -60,8 +60,9 @@ namespace he
             // State changes
             _coreGameData->stateMachine.ProcessStateChanges();
 
-#pragma region Input
+#pragma region Handle Input
 
+            _coreGameData->eventPolledCurrentFrame = false;
             sf::Event event;
             while (_coreGameData->window.pollEvent(event))
             {
@@ -76,15 +77,22 @@ namespace he
                     _coreGameData->window.close();
                 }
 
-                _coreGameData->stateMachine.GetActiveState()->ProcessInput(event);
+                _coreGameData->event = event;
+                _coreGameData->eventPolledCurrentFrame = true;
             }
+
+#pragma endregion
+
+#pragma region Clear
+
+            _coreGameData->window.clear(sf::Color::White);
 
 #pragma endregion
 
 #pragma region Update
 
-            _coreGameData->stateMachine.GetActiveState()->GameState::Update(_timestep);
-            _coreGameData->stateMachine.GetActiveState()->Update(_timestep);
+            _coreGameData->stateMachine.GetActiveState()->GameState::Update(_timestep); // Base class update
+            _coreGameData->stateMachine.GetActiveState()->Update(_timestep);            // Derived class update
             _coreGameData->window.setView(_view);
 
 #pragma endregion
@@ -113,7 +121,7 @@ namespace he
 
 #pragma region Display
 
-            _coreGameData->stateMachine.GetActiveState()->Render();
+            _coreGameData->window.display();
 
 #pragma endregion
         }

@@ -16,10 +16,9 @@ namespace ttt
         PlayingState();
 
     public:
-        void ProcessInput(sf::Event event);
+        void ProcessInput(sf::Event& event);
         void Update(float dt);
         void FixedUpdate(float dt);
-        void Render();
 
     public:
         void Init();
@@ -34,7 +33,6 @@ namespace ttt
         Board _board;
 
     private:
-        sf::Sprite _piece;
         ttt::Piece _yourPiece;
 
     private:

@@ -19,7 +19,7 @@ namespace he
         /**
          * Rotation of the entity.
          */
-        float rotation;
+        float rotation = 0.f;
 
         /**
          * Scale of the entity.

@@ -2,24 +2,47 @@
 #define HE_SPRITE_RENDERER_COMPONENT_HPP
 
 #include "Core/Component.hpp"
-#include "Core/EntityManager.hpp"
 
 #include <SFML/Graphics.hpp>
 
+#include <string>
+
 namespace he
 {
+    /**
+     * Renders a sprite onto the entity's position.
+     */
     class SpriteRendererComponent : public Component
     {
     public:
-        sf::Sprite* sprite;
+        /**
+         * Create a new SpriteRendererComponent.
+         *
+         * @param id Unique identifier for the ClickableComponent
+         */
+        SpriteRendererComponent(std::string id);
 
     public:
-        void Init();
-        void Update(float dt);
-        void FixedUpdate(float dt);
+        /**
+         * Sprite to be rendered.
+         */
+        sf::Sprite sprite;
 
-    private:
-        EntityManager* entityManager;
+    public:
+        /**
+         * Initialize the component.
+         */
+        void Init();
+
+        /**
+         * Update function. Called every frame.
+         */
+        void Update(float dt);
+
+        /**
+         * Fixed update function. Called every 1/60 seconds.
+         */
+        void FixedUpdate(float dt);
     };
 } // namespace he
 
