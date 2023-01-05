@@ -161,8 +161,7 @@ endif()
 
 
 # Copy over data folder
-file(GLOB_RECURSE data data/*)
-file(COPY ${data} DESTINATION data)
+file(COPY data/ DESTINATION data)
 
 
 
