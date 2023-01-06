@@ -28,7 +28,7 @@ namespace ttt
         he::Assets* _assets;
 
     private:
-        const int SPLASH_TIME = 1000;
+        const int SPLASH_TIME = 4000;
 
     private:
         std::shared_ptr<ttt::SpriteExpander> se;

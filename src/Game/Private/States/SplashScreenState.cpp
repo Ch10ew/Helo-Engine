@@ -1,6 +1,8 @@
 #include "States/SplashScreenState.hpp"
 
 #include "AssetManager/Assets.hpp"
+#include "Components/Animation/AnimationState.hpp"
+#include "Components/AnimationComponent.hpp"
 #include "Components/ClickableComponent.hpp"
 #include "Components/SpriteRendererComponent.hpp"
 #include "Core/CoreGameData.hpp"
@@ -44,19 +46,40 @@ namespace ttt
         _assets->textureManager.Load("test", "data/plant.png");
         _test.setTexture(_assets->textureManager.Get("test"));
         */
+        _assets->textureManager.Load("clickableTest", "data/clickableTest.png");
+        _assets->textureManager.Load("playerSpritesheet", "data/Spritesheet-Player.png");
 
         se = std::make_shared<ttt::SpriteExpander>();
 
         std::shared_ptr<he::SpriteRendererComponent> src = std::make_shared<he::SpriteRendererComponent>("src1");
-        _assets->textureManager.Load("clickableTest", "data/clickableTest.png");
         src->sprite.setTexture(_assets->textureManager.Get("clickableTest"));
 
         std::shared_ptr<he::ClickableComponent> cc = std::make_shared<he::ClickableComponent>("cc1");
         cc->Callback = std::make_shared<he::CallbackMethod<ttt::SpriteExpander>>(se.get(), ttt::SpriteExpander::Callback);
 
-        std::shared_ptr<he::Entity> testEntity = std::make_shared<he::Entity>("test1");
+        std::shared_ptr<he::AnimationComponent> ac = std::make_shared<he::AnimationComponent>("ac1");
+
+        // Animation State 1 - Default
+        he::AnimationState as1_default("as1_default");
+        for (int i = 0; i < 12; ++i)
+        {
+            sf::Sprite as1Sprite;
+            as1Sprite.setTexture(_assets->textureManager.Get("playerSpritesheet"));
+            as1Sprite.setTextureRect(sf::IntRect((32 * i), 0, 32, 48));
+            as1Sprite.setScale(sf::Vector2f(4.f, 4.f));
+            as1_default.AddFrame(as1Sprite, 0.1f);
+        }
+        as1_default.isLoop = true;
+
+        // Animation Component
+        ac->AddState(as1_default);
+
+        // Entity
+        std::shared_ptr<he::Entity>
+            testEntity = std::make_shared<he::Entity>("test1");
         testEntity->AddComponent(src);
         testEntity->AddComponent(cc);
+        testEntity->AddComponent(ac);
         _coreGameData->entityManager.AddEntity(testEntity);
 
         testEntity->transform.position.x = 200;

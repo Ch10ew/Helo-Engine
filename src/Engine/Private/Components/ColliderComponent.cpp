@@ -46,24 +46,24 @@ namespace he
         // Check collision
         if (enabled)
         {
-            for (auto& component : CoreGameData::GetInstance()->entityManager.components)
+            if (Callback)
             {
-                // Check for collider component
-                if (typeid(*(component.get())).hash_code() == typeid(ColliderComponent).hash_code())
+                for (auto& component : CoreGameData::GetInstance()->entityManager.components)
                 {
-                    ColliderComponent* colliderComponent = dynamic_cast<ColliderComponent*>(component.get());
-                    Entity* otherEntity = CoreGameData::GetInstance()->entityManager.GetOwningEntity(colliderComponent);
-
-                    if (colliderComponent->enabled)
+                    // Check for collider component
+                    if (typeid(*(component.get())).hash_code() == typeid(ColliderComponent).hash_code())
                     {
-                        // Ignore check if its self
-                        if (otherEntity != selfEntity)
+                        ColliderComponent* colliderComponent = dynamic_cast<ColliderComponent*>(component.get());
+                        Entity* otherEntity = CoreGameData::GetInstance()->entityManager.GetOwningEntity(colliderComponent);
+
+                        if (colliderComponent->enabled)
                         {
-                            // Check bounds
-                            ColliderComponent* colliderComponent = dynamic_cast<ColliderComponent*>(otherEntity->GetComponentByClass<ColliderComponent>());
-                            if (bounds.intersects(colliderComponent->bounds))
+                            // Ignore check if its self
+                            if (otherEntity != selfEntity)
                             {
-                                if (Callback)
+                                // Check bounds
+                                ColliderComponent* colliderComponent = dynamic_cast<ColliderComponent*>(otherEntity->GetComponentByClass<ColliderComponent>());
+                                if (bounds.intersects(colliderComponent->bounds))
                                 {
                                     Callback->Execute(this, colliderComponent);
                                 }
