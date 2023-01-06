@@ -15,6 +15,8 @@ namespace he
 
     void Entity::AddComponent(std::shared_ptr<Component> component)
     {
+        component->Init();
+
         components.push_back(component.get());
         CoreGameData::GetInstance()->entityManager.AddComponent(std::move(component));
     }
@@ -26,7 +28,6 @@ namespace he
 
         if (result)
         {
-
             components.erase(std::remove_if(
                                  components.begin(), components.end(),
                                  [&](const auto& c)

@@ -2,13 +2,13 @@
 
 namespace he
 {
-    void CallbackFunction::Execute(Component* component) const
+    void CallbackFunction::Execute(Component* component, Component* secondary) const
     {
-        return Callback(component);
+        return Callback(component, secondary);
     }
 
-    void CallbackFunction::operator()(Component* component) const
+    void CallbackFunction::operator()(Component* component, Component* secondary) const
     {
-        return Callback(component);
+        return Callback(component, secondary);
     }
 } // namespace he

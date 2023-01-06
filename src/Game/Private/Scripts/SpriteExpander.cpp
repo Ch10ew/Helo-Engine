@@ -12,7 +12,7 @@
 
 namespace ttt
 {
-    void SpriteExpander::Callback(he::Component* component)
+    void SpriteExpander::Callback(he::Component* component, he::Component* ignore)
     {
         he::Entity* selfEntity = he::CoreGameData::GetInstance()->entityManager.GetOwningEntity(component);
 

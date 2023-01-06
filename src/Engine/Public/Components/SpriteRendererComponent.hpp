@@ -28,6 +28,11 @@ namespace he
          */
         sf::Sprite sprite;
 
+        /**
+         * Layer to render the sprite. Higher number denotes a more front layer and vice versa.
+         */
+        int layer = 0;
+
     public:
         /**
          * Initialize the component.

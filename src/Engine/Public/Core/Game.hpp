@@ -4,6 +4,9 @@
 #include "AssetManager/Assets.hpp"
 #include "Core/CoreGameData.hpp"
 #include "Core/StateMachine.hpp"
+#include "FallbackResources/ArialBlack.hpp"
+#include "FallbackResources/SwirlShader.hpp"
+#include "FallbackResources/VineBoomOne.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <aixlog.hpp>

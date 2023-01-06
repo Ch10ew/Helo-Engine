@@ -28,12 +28,28 @@ namespace ttt
 
     class Board
     {
-    public:
+    private:
         Board();
         Board(const int& width, const int& height);
         Board(const int& width, const int& height, const int& win_link_length);
 
         ~Board();
+
+    public:
+        /**
+         * Disabled Copy Constructor
+         */
+        Board(Board& other) = delete;
+
+        /**
+         * Disabled assignment operator
+         */
+        void operator=(const Board& other) = delete;
+
+        /**
+         * Gets the instance of this singleton.
+         */
+        static Board* GetInstance();
 
     public:
         const Piece& At(const int& x, const int& y) const;
@@ -83,6 +99,12 @@ namespace ttt
         Piece* board_ = nullptr;
         BoardState board_state_ = BoardState::Playing;
         Piece winning_piece_ = Piece::None;
+
+    protected:
+        /**
+         * The instance of the singleton.
+         */
+        static Board* _instance;
     };
 } // namespace ttt
 

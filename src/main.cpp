@@ -9,7 +9,7 @@
 
 int main()
 {
-    he::Game game("test title");
+    he::Game game(800, 800, "test title");
     game.SetInitialState(std::unique_ptr<he::GameState>(new ttt::SplashScreenState()));
     game.Run();
 

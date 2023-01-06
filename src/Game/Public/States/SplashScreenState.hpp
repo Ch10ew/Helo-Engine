@@ -5,6 +5,8 @@
 #include "Core/CoreGameData.hpp"
 #include "Core/GameState.hpp"
 
+#include "Scripts/SpriteExpander.hpp"
+
 #include <SFML/Graphics.hpp>
 
 namespace ttt
@@ -20,19 +22,16 @@ namespace ttt
 
     public:
         void Init();
-        void Pause();
-        void Resume();
 
     private:
         he::CoreGameData* _coreGameData;
         he::Assets* _assets;
 
     private:
-        const int SPLASH_TIME = 3000;
+        const int SPLASH_TIME = 1000;
 
     private:
-        sf::CircleShape _circleShape;
-        sf::Sprite _test;
+        std::shared_ptr<ttt::SpriteExpander> se;
 
     private:
         sf::Clock _clock;

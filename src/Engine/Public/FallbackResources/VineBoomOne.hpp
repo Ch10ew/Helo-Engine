@@ -9,7 +9,7 @@ namespace he
     {
         extern const unsigned char VINE_BOOM_ONE[];
 
-        const size_t VINE_BOOM_ONE_SIZE = 221450;
+        const size_t VINE_BOOM_ONE_SIZE = 14618;
     } // namespace res
 } // namespace he
 

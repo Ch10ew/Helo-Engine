@@ -27,7 +27,6 @@ namespace ttt
         {
             _coreGameData->stateMachine.AddState(std::unique_ptr<he::GameState>(new ttt::PlayingState()));
             _assets->textureManager.Unload("clickableTest");
-            _circleShape.setFillColor(sf::Color::Blue);
         }
     }
 
@@ -46,7 +45,7 @@ namespace ttt
         _test.setTexture(_assets->textureManager.Get("test"));
         */
 
-        std::shared_ptr<ttt::SpriteExpander> se = std::make_shared<ttt::SpriteExpander>();
+        se = std::make_shared<ttt::SpriteExpander>();
 
         std::shared_ptr<he::SpriteRendererComponent> src = std::make_shared<he::SpriteRendererComponent>("src1");
         _assets->textureManager.Load("clickableTest", "data/clickableTest.png");
@@ -62,13 +61,5 @@ namespace ttt
 
         testEntity->transform.position.x = 200;
         testEntity->transform.position.y = 200;
-    }
-
-    void SplashScreenState::Pause()
-    {
-    }
-
-    void SplashScreenState::Resume()
-    {
     }
 } // namespace ttt

@@ -1,14 +1,16 @@
 #include "Core/EntityManager.hpp"
 
+#include "Components/SpriteRendererComponent.hpp"
 #include "Core/Entity.hpp"
+
+#include <aixlog.hpp>
 
 #include <algorithm>
 #include <map>
 #include <memory>
 #include <set>
 #include <typeinfo>
-
-#include <iostream>
+#include <vector>
 
 namespace he
 {
@@ -25,6 +27,7 @@ namespace he
         {
             if (e->id == entity->id)
             {
+                LOG(WARNING) << "Entity with id '" << entity->id << "' already exists! Skipping creation of Entity '" << entity->id << "'\n";
                 return false;
             }
         }
@@ -36,6 +39,16 @@ namespace he
     bool EntityManager::RemoveEntity(std::string id)
     {
         size_t before = entities.size();
+        Entity* selfEntity = GetEntityById(id);
+
+        components.erase(std::remove_if(
+                             components.begin(), components.end(),
+                             [&](const auto& c)
+                             {
+                                 return GetOwningEntity(c.get()) == selfEntity;
+                             }),
+                         components.end());
+
         entities.erase(std::remove_if(
                            entities.begin(), entities.end(),
                            [&](const auto& e)
@@ -44,6 +57,15 @@ namespace he
                            }),
                        entities.end());
 
+        if (!(before == entities.size()))
+        {
+            LOG(INFO) << "Successfully removed entity\n";
+        }
+        else
+        {
+            LOG(WARNING) << "Failed to remove entity! Check the id supplied\n";
+        }
+
         return !(before == entities.size());
     }
 
@@ -51,6 +73,7 @@ namespace he
     {
         if (!component)
         {
+            LOG(WARNING) << "Null component pointer provided! Returning nullptr\n";
             return nullptr;
         }
 
@@ -81,12 +104,26 @@ namespace he
         return nullptr;
     }
 
+    Entity* EntityManager::GetEntityById(std::string id)
+    {
+        for (auto& entity : entities)
+        {
+            if (entity->id == id)
+            {
+                return entity.get();
+            }
+        }
+
+        return nullptr;
+    }
+
     bool EntityManager::AddComponent(std::shared_ptr<Component> component)
     {
         for (auto& c : components)
         {
             if (c->id == component->id)
             {
+                LOG(WARNING) << "Component with id '" << component->id << "' already exists! Skipping creation of Component '" << component->id << "'\n";
                 return false;
             }
         }
@@ -114,9 +151,11 @@ namespace he
     {
         // Get hashes of all types of components
         std::map<int, std::set<size_t>> priorityComponentHashMap;
+        std::set<size_t> uniqueHashes;
         for (auto& component : components)
         {
             priorityComponentHashMap[component.get()->priority].insert(typeid(*(component.get())).hash_code());
+            uniqueHashes.insert(typeid(*(component.get())).hash_code());
         }
 
         // sort in tmp vector
@@ -133,9 +172,65 @@ namespace he
             }
         }
 
+        std::vector<std::shared_ptr<Component>> tmpComponents2;
+        std::vector<std::shared_ptr<Component>> tmpSpriteRendererComponents; // for custom renderling layer sort
+        bool isEnteredSpriteRendererComponentsSection;
+        bool isExitedSpriteRendererComponentsSection;
+        if (uniqueHashes.find(typeid(SpriteRendererComponent).hash_code()) != uniqueHashes.end())
+        {
+            for (int x = 0; x < tmpComponents.size(); ++x)
+            {
+                // check for sprite renderer component and add to separate list, then combine at the end
+                if (typeid(*(tmpComponents[x].get())).hash_code() == typeid(SpriteRendererComponent).hash_code())
+                {
+                    // Entered/In SpriteRendererComponent section
+                    isEnteredSpriteRendererComponentsSection = true;
+                    tmpSpriteRendererComponents.push_back(std::move(tmpComponents[x]));
+                }
+                else if (isEnteredSpriteRendererComponentsSection)
+                {
+                    // Upon exit
+                    isExitedSpriteRendererComponentsSection = true;
+
+                    // Resort the SpriteRendererComponents
+                    std::sort(
+                        tmpSpriteRendererComponents.begin(),
+                        tmpSpriteRendererComponents.end(),
+                        [](std::shared_ptr<Component>& a, std::shared_ptr<Component>& b)
+                        { return (dynamic_cast<SpriteRendererComponent*>(a.get())->layer < dynamic_cast<SpriteRendererComponent*>(b.get())->layer); });
+
+                    // Reattach the SpriteRendererComponents into the tmpComponents
+                    for (auto& spriteRendererComponent : tmpSpriteRendererComponents)
+                    {
+                        tmpComponents2.push_back(std::move(spriteRendererComponent));
+                    }
+                    tmpSpriteRendererComponents.clear();
+
+                    // Default behavior (after exiting the SpriteRendererComponent section)
+                    tmpComponents2.push_back(std::move(tmpComponents[x]));
+                }
+                else
+                {
+                    // Default behavior
+                    tmpComponents2.push_back(std::move(tmpComponents[x]));
+                }
+            }
+            // Reattach the SpriteRendererComponents into the tmpComponents (in case SpriteRendererComponent is the last component)
+            std::sort(
+                tmpSpriteRendererComponents.begin(),
+                tmpSpriteRendererComponents.end(),
+                [](std::shared_ptr<Component>& a, std::shared_ptr<Component>& b)
+                { return (dynamic_cast<SpriteRendererComponent*>(a.get())->layer < dynamic_cast<SpriteRendererComponent*>(b.get())->layer); });
+
+            for (auto& spriteRendererComponent : tmpSpriteRendererComponents)
+            {
+                tmpComponents2.push_back(std::move(spriteRendererComponent));
+            }
+        }
+
         // rebuild components vector
         components.clear();
-        for (auto& component : tmpComponents)
+        for (auto& component : tmpComponents2)
         {
             components.push_back(std::move(component));
         }

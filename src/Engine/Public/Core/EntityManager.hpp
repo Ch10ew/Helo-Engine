@@ -71,6 +71,14 @@ namespace he
          */
         Component* GetComponentById(std::string id);
 
+        /**
+         * @brief Gets an entity by its id
+         *
+         * @param id
+         * @return Entity*
+         */
+        Entity* GetEntityById(std::string id);
+
     public:
         /**
          * Internal use function.

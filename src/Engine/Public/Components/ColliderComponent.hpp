@@ -1,9 +1,7 @@
-#ifndef HE_CLICKABLE_COMPONENT_HPP
-#define HE_CLICKABLE_COMPONENT_HPP
+#ifndef HE_COLLIDER_COMPONENT_HPP
+#define HE_COLLIDER_COMPONENT_HPP
 
 #include "Core/Component.hpp"
-#include "Core/CoreGameData.hpp"
-#include "Core/EntityManager.hpp"
 #include "Core/Wrapper/CallbackFunction.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -13,26 +11,17 @@
 
 namespace he
 {
-    /**
-     * Makes an entity clickable.
-     *
-     * Behavior that happens after the entity's sprite is clicked can be changed with `Callback`.
-     *
-     * Please ensure that the owning entity contains a SpriteRendererComponent.
-     */
-    class ClickableComponent : public Component
+    class ColliderComponent : public Component
     {
     public:
         /**
-         * Create a new ClickableComponent.
+         * Bounding box for the collider.
          *
-         * @param id Unique identifier for the ClickableComponent
          */
-        ClickableComponent(std::string id);
+        sf::FloatRect bounds = sf::FloatRect(0, 0, 16, 16);
 
-    public:
         /**
-         * Behavior when the entity's sprite is clicked.
+         * Behavior when there are collisions.
          */
         std::shared_ptr<CallbackFunction> Callback;
 
@@ -40,6 +29,9 @@ namespace he
          * If the component is enabled.
          */
         bool enabled = true;
+
+    public:
+        ColliderComponent(std::string id);
 
     public:
         /**
@@ -59,4 +51,4 @@ namespace he
     };
 } // namespace he
 
-#endif // HE_CLICKABLE_COMPONENT_HPP
+#endif // HE_COLLIDER_COMPONENT_HPP

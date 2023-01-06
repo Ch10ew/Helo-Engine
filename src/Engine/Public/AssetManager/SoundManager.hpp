@@ -12,6 +12,9 @@ namespace he
     class SoundManager : public AssetManagerBase<sf::SoundBuffer>
     {
     public:
+        ~SoundManager();
+
+    public:
         void Load(const std::string& id, const std::string& filepath);
         void Unload(const std::string& id);
         sf::SoundBuffer& Get(const std::string& id);

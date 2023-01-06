@@ -8,6 +8,8 @@
 
 namespace ttt
 {
+    Board* Board::_instance = nullptr;
+
     /**
      * @brief Construct a new Board:: Board object.
      */
@@ -50,6 +52,16 @@ namespace ttt
     Board::~Board()
     {
         delete[] board_;
+        delete _instance;
+    }
+
+    Board* Board::GetInstance()
+    {
+        if (_instance == nullptr)
+        {
+            _instance = new Board();
+        }
+        return _instance;
     }
 
     /**

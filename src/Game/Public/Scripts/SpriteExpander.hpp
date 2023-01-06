@@ -20,8 +20,9 @@ namespace ttt
          * @brief Expands the sprite's scale by 1.25.
          *
          * @param component Caller component
+         * @param ignore Unused
          */
-        void Callback(he::Component* component);
+        void Callback(he::Component* component, he::Component* ignore);
     };
 } // namespace ttt
 

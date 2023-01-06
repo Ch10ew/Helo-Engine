@@ -23,28 +23,31 @@ namespace he
 
     void ClickableComponent::Update(float dt)
     {
-        if (CoreGameData::GetInstance()->eventPolledCurrentFrame)
+        if (enabled)
         {
-            if (CoreGameData::GetInstance()->event.type == sf::Event::MouseButtonPressed)
+            if (CoreGameData::GetInstance()->eventPolledCurrentFrame)
             {
-                if (CoreGameData::GetInstance()->event.mouseButton.button == sf::Mouse::Button::Left)
+                if (CoreGameData::GetInstance()->event.type == sf::Event::MouseButtonPressed)
                 {
-                    Entity* selfEntity = CoreGameData::GetInstance()->entityManager.GetOwningEntity(this);
-                    Component* component = selfEntity->GetComponentByClass<SpriteRendererComponent>();
-                    if (component)
+                    if (CoreGameData::GetInstance()->event.mouseButton.button == sf::Mouse::Button::Left)
                     {
-                        SpriteRendererComponent* spriteRendererComponent = dynamic_cast<SpriteRendererComponent*>(component);
-                        sf::Vector2f mousePos = sf::Vector2f(CoreGameData::GetInstance()->event.mouseButton.x, CoreGameData::GetInstance()->event.mouseButton.y);
-                        if (spriteRendererComponent->sprite.getGlobalBounds().contains(mousePos))
+                        Entity* selfEntity = CoreGameData::GetInstance()->entityManager.GetOwningEntity(this);
+                        Component* component = selfEntity->GetComponentByClass<SpriteRendererComponent>();
+                        if (component)
                         {
-                            if (Callback)
+                            SpriteRendererComponent* spriteRendererComponent = dynamic_cast<SpriteRendererComponent*>(component);
+                            sf::Vector2f mousePos = sf::Vector2f(CoreGameData::GetInstance()->event.mouseButton.x, CoreGameData::GetInstance()->event.mouseButton.y);
+                            if (spriteRendererComponent->sprite.getGlobalBounds().contains(mousePos))
                             {
-                                Callback->Execute(this);
-                            }
-                            else
-                            {
-                                LOG(WARNING) << "Entity " << selfEntity->id << " clicked but no callback assigned."
-                                             << "\n";
+                                if (Callback)
+                                {
+                                    Callback->Execute(this, nullptr);
+                                }
+                                else
+                                {
+                                    LOG(WARNING) << "Entity " << selfEntity->id << " clicked but no callback assigned."
+                                                 << "\n";
+                                }
                             }
                         }
                     }

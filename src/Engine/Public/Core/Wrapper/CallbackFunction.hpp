@@ -20,17 +20,17 @@ namespace he
          *
          * @param component Caller component
          */
-        virtual void Execute(Component* component) const;
+        virtual void Execute(Component* component, Component* secondary) const;
 
         /**
          * @brief Run the callback.
          *
          * @param component Caller component
          */
-        virtual void operator()(Component* component) const;
+        virtual void operator()(Component* component, Component* secondary) const;
 
     protected:
-        void (*Callback)(Component*);
+        void (*Callback)(Component*, Component*);
     };
 } // namespace he
 

@@ -12,10 +12,18 @@
 
 namespace he
 {
+    SoundManager::~SoundManager()
+    {
+        for (auto it = _assets.begin(); it != _assets.end(); ++it)
+        {
+            _assets[it->first] = nullptr;
+        }
+    }
+
     void SoundManager::Load(const std::string& id, const std::string& filepath)
     {
         LOG(INFO) << "Attempting to load sound '" << filepath << "' as id '" << id << "'\n";
-        std::unique_ptr<sf::SoundBuffer> soundBuffer;
+        std::unique_ptr<sf::SoundBuffer> soundBuffer = std::make_unique<sf::SoundBuffer>();
         if (soundBuffer->loadFromFile(filepath))
         {
             this->_assets[id] = std::move(soundBuffer);

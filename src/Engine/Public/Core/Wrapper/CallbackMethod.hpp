@@ -12,6 +12,8 @@ namespace he
      *
      * Use as a pointer (in most cases).
      *
+     * `secondary` can be ignored if not used.
+     *
      * @tparam T Class that contains the member function to be used as a callback
      */
     template <class T>
@@ -24,7 +26,7 @@ namespace he
          * @param object Pointer to instance of T
          * @param Callback Address of function
          */
-        CallbackMethod(T* object, void (T::*Callback)(Component* component));
+        CallbackMethod(T* object, void (T::*Callback)(Component* component, Component* secondary));
 
     public:
         /**
@@ -32,14 +34,14 @@ namespace he
          *
          * @param component Caller component
          */
-        void Execute(Component* component) const;
+        void Execute(Component* component, Component* secondary) const;
 
         /**
          * @brief Run the callback.
          *
          * @param component Caller component
          */
-        void operator()(Component* component) const;
+        void operator()(Component* component, Component* secondary) const;
 
     protected:
         /**
@@ -50,25 +52,25 @@ namespace he
         /**
          * Callback function
          */
-        void (T::*method)(Component* component);
+        void (T::*method)(Component* component, Component* secondary);
     };
 
     template <class T>
-    CallbackMethod<T>::CallbackMethod(T* object, void (T::*Callback)(Component* component)) : object(object), method(Callback)
+    CallbackMethod<T>::CallbackMethod(T* object, void (T::*Callback)(Component* component, Component* secondary)) : object(object), method(Callback)
     {
     }
 
     // Responsible for executing
     template <class T>
-    void CallbackMethod<T>::Execute(Component* component) const
+    void CallbackMethod<T>::Execute(Component* component, Component* secondary) const
     {
-        return (object->*method)(component);
+        return (object->*method)(component, secondary);
     }
 
     template <class T>
-    void CallbackMethod<T>::operator()(Component* component) const
+    void CallbackMethod<T>::operator()(Component* component, Component* secondary) const
     {
-        return (object->*method)(component);
+        return (object->*method)(component, secondary);
     }
 } // namespace he
 
