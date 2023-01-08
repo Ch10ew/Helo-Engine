@@ -227,6 +227,13 @@ namespace he
                 tmpComponents2.push_back(std::move(spriteRendererComponent));
             }
         }
+        else
+        {
+            for (auto& component : tmpComponents)
+            {
+                tmpComponents2.push_back(std::move(component));
+            }
+        }
 
         // rebuild components vector
         components.clear();
