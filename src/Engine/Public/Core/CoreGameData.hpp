@@ -65,7 +65,7 @@ namespace he
         /**
          * Events in the game. Will only change when new events are polled.
          */
-        sf::Event event;
+        std::vector<sf::Event> events;
 
         /**
          * Boolean for if any events are polled this frame.

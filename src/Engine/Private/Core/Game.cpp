@@ -1,7 +1,6 @@
 #include "Core/Game.hpp"
 
 #include "Core/CoreGameData.hpp"
-#include "States/SplashScreenState.hpp"
 
 #include <aixlog.hpp>
 
@@ -63,9 +62,13 @@ namespace he
 #pragma region Handle Input
 
             _coreGameData->eventPolledCurrentFrame = false;
+            _coreGameData->events.clear();
             sf::Event event;
             while (_coreGameData->window.pollEvent(event))
             {
+                _coreGameData->eventPolledCurrentFrame = true;
+                _coreGameData->events.push_back(event);
+
                 if (event.type == sf::Event::Resized)
                 {
                     _view.reset(sf::FloatRect(0, 0, event.size.width, event.size.height)); // Resizing based on 0, 0
@@ -76,9 +79,6 @@ namespace he
                 {
                     _coreGameData->window.close();
                 }
-
-                _coreGameData->event = event;
-                _coreGameData->eventPolledCurrentFrame = true;
             }
 
 #pragma endregion
