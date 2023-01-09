@@ -11,6 +11,7 @@ namespace he
     SpriteRendererComponent::SpriteRendererComponent(std::string id)
         : Component(id)
     {
+        priority = -2;
     }
 
     void SpriteRendererComponent::Init()
@@ -19,21 +20,27 @@ namespace he
 
     void SpriteRendererComponent::Update(float dt)
     {
-        if (!CoreGameData::GetInstance()->entityManager.GetOwningEntity(this))
+        if (enabled)
         {
-            return;
+            if (!CoreGameData::GetInstance()->entityManager.GetOwningEntity(this))
+            {
+                return;
+            }
+
+            he::Transform& transform = CoreGameData::GetInstance()->entityManager.GetOwningEntity(this)->transform;
+            sf::Vector2f position = transform.position;
+            sf::FloatRect spriteRect = sprite.getGlobalBounds();
+
+            sf::Vector2f newSpritePosition;
+            newSpritePosition.x = position.x - spriteRect.width / 2;
+            newSpritePosition.y = position.y - spriteRect.height / 2;
+
+            sprite.setPosition(newSpritePosition);
+            sprite.setRotation(transform.rotation);
+            sprite.setScale(transform.scale);
+
+            CoreGameData::GetInstance()->window.draw(sprite);
         }
-
-        sf::Vector2f position = CoreGameData::GetInstance()->entityManager.GetOwningEntity(this)->transform.position;
-        sf::FloatRect spriteRect = sprite.getGlobalBounds();
-
-        sf::Vector2f newSpritePosition;
-        newSpritePosition.x = position.x - spriteRect.width / 2;
-        newSpritePosition.y = position.y - spriteRect.height / 2;
-
-        sprite.setPosition(newSpritePosition);
-
-        CoreGameData::GetInstance()->window.draw(sprite);
     }
 
     void SpriteRendererComponent::FixedUpdate(float dt)

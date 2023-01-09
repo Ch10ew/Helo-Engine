@@ -1,5 +1,5 @@
-#ifndef HE_SPRITE_RENDERER_COMPONENT_HPP
-#define HE_SPRITE_RENDERER_COMPONENT_HPP
+#ifndef HE_TEXT_RENDERER_COMPONENT_HPP
+#define HE_TEXT_RENDERER_COMPONENT_HPP
 
 #include "Core/Component.hpp"
 
@@ -10,9 +10,9 @@
 namespace he
 {
     /**
-     * Renders a sprite onto the entity's position.
+     * Renders a text onto the entity's position.
      */
-    class SpriteRendererComponent : public Component
+    class TextRendererComponent : public Component
     {
     public:
         /**
@@ -20,13 +20,13 @@ namespace he
          *
          * @param id Unique identifier for the ClickableComponent
          */
-        SpriteRendererComponent(std::string id);
+        TextRendererComponent(std::string id);
 
     public:
         /**
          * Sprite to be rendered.
          */
-        sf::Sprite sprite;
+        sf::Text text;
 
         /**
          * Layer to render the sprite. Higher number denotes a more front layer and vice versa.
@@ -56,4 +56,4 @@ namespace he
     };
 } // namespace he
 
-#endif // HE_SPRITE_RENDERER_COMPONENT_HPP
+#endif // HE_TEXT_RENDERER_COMPONENT_HPP

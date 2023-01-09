@@ -1,6 +1,7 @@
 #include "Core/EntityManager.hpp"
 
 #include "Components/SpriteRendererComponent.hpp"
+#include "Components/TextRendererComponent.hpp"
 #include "Core/Entity.hpp"
 
 #include <aixlog.hpp>
@@ -173,40 +174,57 @@ namespace he
         }
 
         std::vector<std::shared_ptr<Component>> tmpComponents2;
-        std::vector<std::shared_ptr<Component>> tmpSpriteRendererComponents; // for custom renderling layer sort
+        std::vector<std::shared_ptr<Component>> tmpSpriteTextRendererComponents; // for custom renderling layer sort
         bool isEnteredSpriteRendererComponentsSection;
         bool isExitedSpriteRendererComponentsSection;
-        if (uniqueHashes.find(typeid(SpriteRendererComponent).hash_code()) != uniqueHashes.end())
+        if (uniqueHashes.find(typeid(SpriteRendererComponent).hash_code()) != uniqueHashes.end() || uniqueHashes.find(typeid(TextRendererComponent).hash_code()) != uniqueHashes.end())
         {
             for (int x = 0; x < tmpComponents.size(); ++x)
             {
-                // check for sprite renderer component and add to separate list, then combine at the end
-                if (typeid(*(tmpComponents[x].get())).hash_code() == typeid(SpriteRendererComponent).hash_code())
+                // check for sprite renderer component or text renderer component and add to separate list, then combine at the end
+                if (typeid(*(tmpComponents[x].get())).hash_code() == typeid(SpriteRendererComponent).hash_code() || typeid(*(tmpComponents[x].get())).hash_code() == typeid(TextRendererComponent).hash_code())
                 {
-                    // Entered/In SpriteRendererComponent section
+                    // Entered/In SpriteTextRendererComponent section
                     isEnteredSpriteRendererComponentsSection = true;
-                    tmpSpriteRendererComponents.push_back(std::move(tmpComponents[x]));
+                    tmpSpriteTextRendererComponents.push_back(std::move(tmpComponents[x]));
                 }
                 else if (isEnteredSpriteRendererComponentsSection)
                 {
                     // Upon exit
                     isExitedSpriteRendererComponentsSection = true;
 
-                    // Resort the SpriteRendererComponents
+                    // Resort the SpriteTextRendererComponents
                     std::sort(
-                        tmpSpriteRendererComponents.begin(),
-                        tmpSpriteRendererComponents.end(),
+                        tmpSpriteTextRendererComponents.begin(),
+                        tmpSpriteTextRendererComponents.end(),
                         [](std::shared_ptr<Component>& a, std::shared_ptr<Component>& b)
-                        { return (dynamic_cast<SpriteRendererComponent*>(a.get())->layer < dynamic_cast<SpriteRendererComponent*>(b.get())->layer); });
+                        {
+                            int layer1 = 0;
+                            int layer2 = 0;
+                            SpriteRendererComponent* spriteRendererComponent1 = dynamic_cast<SpriteRendererComponent*>(a.get());
+                            TextRendererComponent* textRendererComponent1 = dynamic_cast<TextRendererComponent*>(a.get());
+                            SpriteRendererComponent* spriteRendererComponent2 = dynamic_cast<SpriteRendererComponent*>(b.get());
+                            TextRendererComponent* textRendererComponent2 = dynamic_cast<TextRendererComponent*>(b.get());
 
-                    // Reattach the SpriteRendererComponents into the tmpComponents
-                    for (auto& spriteRendererComponent : tmpSpriteRendererComponents)
+                            if (spriteRendererComponent1)
+                                layer1 = spriteRendererComponent1->layer;
+                            if (textRendererComponent1)
+                                layer1 = textRendererComponent1->layer;
+                            if (spriteRendererComponent2)
+                                layer2 = spriteRendererComponent2->layer;
+                            if (textRendererComponent2)
+                                layer2 = textRendererComponent2->layer;
+                            return (layer1 < layer2);
+                        });
+
+                    // Reattach the SpriteTextRendererComponents into the tmpComponents
+                    for (auto& spriteTextRendererComponent : tmpSpriteTextRendererComponents)
                     {
-                        tmpComponents2.push_back(std::move(spriteRendererComponent));
+                        tmpComponents2.push_back(std::move(spriteTextRendererComponent));
                     }
-                    tmpSpriteRendererComponents.clear();
+                    tmpSpriteTextRendererComponents.clear();
 
-                    // Default behavior (after exiting the SpriteRendererComponent section)
+                    // Default behavior (after exiting the SpriteTextRendererComponent section)
                     tmpComponents2.push_back(std::move(tmpComponents[x]));
                 }
                 else
@@ -215,16 +233,33 @@ namespace he
                     tmpComponents2.push_back(std::move(tmpComponents[x]));
                 }
             }
-            // Reattach the SpriteRendererComponents into the tmpComponents (in case SpriteRendererComponent is the last component)
+            // Reattach the SpriteTextRendererComponents into the tmpComponents (in case SpriteTextRendererComponent is the last component)
             std::sort(
-                tmpSpriteRendererComponents.begin(),
-                tmpSpriteRendererComponents.end(),
+                tmpSpriteTextRendererComponents.begin(),
+                tmpSpriteTextRendererComponents.end(),
                 [](std::shared_ptr<Component>& a, std::shared_ptr<Component>& b)
-                { return (dynamic_cast<SpriteRendererComponent*>(a.get())->layer < dynamic_cast<SpriteRendererComponent*>(b.get())->layer); });
+                {
+                    int layer1 = 0;
+                    int layer2 = 0;
+                    SpriteRendererComponent* spriteRendererComponent1 = dynamic_cast<SpriteRendererComponent*>(a.get());
+                    TextRendererComponent* textRendererComponent1 = dynamic_cast<TextRendererComponent*>(a.get());
+                    SpriteRendererComponent* spriteRendererComponent2 = dynamic_cast<SpriteRendererComponent*>(b.get());
+                    TextRendererComponent* textRendererComponent2 = dynamic_cast<TextRendererComponent*>(b.get());
 
-            for (auto& spriteRendererComponent : tmpSpriteRendererComponents)
+                    if (spriteRendererComponent1)
+                        layer1 = spriteRendererComponent1->layer;
+                    if (textRendererComponent1)
+                        layer1 = textRendererComponent1->layer;
+                    if (spriteRendererComponent2)
+                        layer2 = spriteRendererComponent2->layer;
+                    if (textRendererComponent2)
+                        layer2 = textRendererComponent2->layer;
+                    return (layer1 < layer2);
+                });
+
+            for (auto& spriteTextRendererComponent : tmpSpriteTextRendererComponents)
             {
-                tmpComponents2.push_back(std::move(spriteRendererComponent));
+                tmpComponents2.push_back(std::move(spriteTextRendererComponent));
             }
         }
         else
