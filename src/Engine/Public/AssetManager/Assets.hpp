@@ -36,7 +36,7 @@ namespace he
         /**
          * Gets the instance of this singleton.
          */
-        static Assets* GetInstance();
+        static Assets& GetInstance();
 
     public:
         /**
@@ -59,11 +59,10 @@ namespace he
          */
         TextureManager textureManager;
 
-    protected:
         /**
-         * The instance of the singleton.
+         * Music collection of the game.
          */
-        static Assets* _instance;
+        MusicPlayer musicPlayer;
     };
 } // namespace he
 

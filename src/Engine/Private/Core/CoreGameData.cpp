@@ -2,23 +2,17 @@
 
 namespace he
 {
-    he::CoreGameData* he::CoreGameData::_instance = nullptr;
-
     CoreGameData::CoreGameData()
     {
     }
 
     CoreGameData::~CoreGameData()
     {
-        delete _instance;
     }
 
-    CoreGameData* CoreGameData::GetInstance()
+    CoreGameData& CoreGameData::GetInstance()
     {
-        if (_instance == nullptr)
-        {
-            _instance = new CoreGameData();
-        }
+        static CoreGameData _instance;
         return _instance;
     }
 } // namespace he

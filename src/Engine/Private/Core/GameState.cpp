@@ -7,7 +7,7 @@ namespace he
 {
     void GameState::Update(float dt)
     {
-        for (auto& component : CoreGameData::GetInstance()->entityManager.components)
+        for (auto& component : CoreGameData::GetInstance().entityManager.components)
         {
             component->Update(dt);
         }
@@ -15,7 +15,7 @@ namespace he
 
     void GameState::FixedUpdate(float dt)
     {
-        for (auto& component : CoreGameData::GetInstance()->entityManager.components)
+        for (auto& component : CoreGameData::GetInstance().entityManager.components)
         {
             component->FixedUpdate(dt);
         }

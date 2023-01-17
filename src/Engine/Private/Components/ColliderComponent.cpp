@@ -20,7 +20,7 @@ namespace he
 
     void ColliderComponent::Init()
     {
-        Entity* selfEntity = CoreGameData::GetInstance()->entityManager.GetOwningEntity(this);
+        Entity* selfEntity = CoreGameData::GetInstance().entityManager.GetOwningEntity(this);
         if (selfEntity)
         {
             SpriteRendererComponent* spriteRendererComponent = dynamic_cast<SpriteRendererComponent*>(selfEntity->GetComponentByClass<SpriteRendererComponent>());
@@ -35,7 +35,7 @@ namespace he
     void ColliderComponent::Update(float dt)
     {
         // Update collider position
-        Entity* selfEntity = CoreGameData::GetInstance()->entityManager.GetOwningEntity(this);
+        Entity* selfEntity = CoreGameData::GetInstance().entityManager.GetOwningEntity(this);
         SpriteRendererComponent* spriteRendererComponent = dynamic_cast<SpriteRendererComponent*>(selfEntity->GetComponentByClass<SpriteRendererComponent>());
         if (spriteRendererComponent)
         {
@@ -48,13 +48,13 @@ namespace he
         {
             if (Callback)
             {
-                for (auto& component : CoreGameData::GetInstance()->entityManager.components)
+                for (auto& component : CoreGameData::GetInstance().entityManager.components)
                 {
                     // Check for collider component
                     if (typeid(*(component.get())).hash_code() == typeid(ColliderComponent).hash_code())
                     {
                         ColliderComponent* colliderComponent = dynamic_cast<ColliderComponent*>(component.get());
-                        Entity* otherEntity = CoreGameData::GetInstance()->entityManager.GetOwningEntity(colliderComponent);
+                        Entity* otherEntity = CoreGameData::GetInstance().entityManager.GetOwningEntity(colliderComponent);
 
                         if (colliderComponent->enabled)
                         {

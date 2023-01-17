@@ -2,23 +2,17 @@
 
 namespace he
 {
-    he::Assets* he::Assets::_instance = nullptr;
-
     Assets::Assets()
     {
     }
 
     Assets::~Assets()
     {
-        delete _instance;
     }
 
-    Assets* Assets::GetInstance()
+    Assets& Assets::GetInstance()
     {
-        if (_instance == nullptr)
-        {
-            _instance = new Assets();
-        }
+        static Assets _instance;
         return _instance;
     }
 } // namespace he

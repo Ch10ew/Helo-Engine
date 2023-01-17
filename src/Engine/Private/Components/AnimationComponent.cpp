@@ -92,7 +92,7 @@ namespace he
         {
             // Update SpriteRendererComponent
             currentState->Update(dt);
-            Entity* selfEntity = CoreGameData::GetInstance()->entityManager.GetOwningEntity(this);
+            Entity* selfEntity = CoreGameData::GetInstance().entityManager.GetOwningEntity(this);
             SpriteRendererComponent* spriteRendererComponent = dynamic_cast<SpriteRendererComponent*>(selfEntity->GetComponentByClass<SpriteRendererComponent>());
             if (spriteRendererComponent)
             {

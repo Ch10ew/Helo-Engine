@@ -18,13 +18,13 @@ namespace he
         component->Init();
 
         components.push_back(component.get());
-        CoreGameData::GetInstance()->entityManager.AddComponent(std::move(component));
+        CoreGameData::GetInstance().entityManager.AddComponent(std::move(component));
     }
 
     bool Entity::RemoveComponent(std::string id)
     {
         size_t before = components.size();
-        bool result = CoreGameData::GetInstance()->entityManager.RemoveComponent(id);
+        bool result = CoreGameData::GetInstance().entityManager.RemoveComponent(id);
 
         if (result)
         {

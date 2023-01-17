@@ -22,12 +22,12 @@ namespace he
     {
         if (enabled)
         {
-            if (!CoreGameData::GetInstance()->entityManager.GetOwningEntity(this))
+            if (!CoreGameData::GetInstance().entityManager.GetOwningEntity(this))
             {
                 return;
             }
 
-            he::Transform& transform = CoreGameData::GetInstance()->entityManager.GetOwningEntity(this)->transform;
+            he::Transform& transform = CoreGameData::GetInstance().entityManager.GetOwningEntity(this)->transform;
             sf::Vector2f position = transform.position;
             sf::FloatRect spriteRect = sprite.getGlobalBounds();
 
@@ -39,7 +39,7 @@ namespace he
             sprite.setRotation(transform.rotation);
             sprite.setScale(transform.scale);
 
-            CoreGameData::GetInstance()->window.draw(sprite);
+            CoreGameData::GetInstance().window.draw(sprite);
         }
     }
 

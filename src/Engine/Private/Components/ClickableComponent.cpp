@@ -25,15 +25,15 @@ namespace he
     {
         if (enabled)
         {
-            if (CoreGameData::GetInstance()->eventPolledCurrentFrame)
+            if (CoreGameData::GetInstance().eventPolledCurrentFrame)
             {
-                for (auto& event : CoreGameData::GetInstance()->events)
+                for (auto& event : CoreGameData::GetInstance().events)
                 {
                     if (event.type == sf::Event::MouseButtonPressed)
                     {
                         if (event.mouseButton.button == sf::Mouse::Button::Left)
                         {
-                            Entity* selfEntity = CoreGameData::GetInstance()->entityManager.GetOwningEntity(this);
+                            Entity* selfEntity = CoreGameData::GetInstance().entityManager.GetOwningEntity(this);
                             Component* component = selfEntity->GetComponentByClass<SpriteRendererComponent>();
                             if (component)
                             {

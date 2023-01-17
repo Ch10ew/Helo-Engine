@@ -69,9 +69,9 @@ namespace he
 
     private:
         /**
-         * Pointer to the instance of core game data that will be used throughout the game.
+         * Reference to the instance of core game data that will be used throughout the game.
          */
-        CoreGameData* _coreGameData;
+        CoreGameData& _coreGameData;
 
 #pragma endregion
 

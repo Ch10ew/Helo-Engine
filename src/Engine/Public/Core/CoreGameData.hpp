@@ -10,8 +10,6 @@ namespace he
     /**
      * Singleton that holds the core game data.
      *
-     * Not thread-safe.
-     *
      * Consists of:
      * - SFML window instance
      * - State Machine instance
@@ -44,7 +42,7 @@ namespace he
         /**
          * Gets the instance of this singleton.
          */
-        static CoreGameData* GetInstance();
+        static CoreGameData& GetInstance();
 
     public:
         /**
@@ -71,12 +69,6 @@ namespace he
          * Boolean for if any events are polled this frame.
          */
         bool eventPolledCurrentFrame = false;
-
-    protected:
-        /**
-         * The instance of the singleton.
-         */
-        static CoreGameData* _instance;
     };
 } // namespace he
 

@@ -21,7 +21,7 @@ namespace he
 
     void AudioListenerComponent::Update(float dt)
     {
-        for (auto& component : CoreGameData::GetInstance()->entityManager.components)
+        for (auto& component : CoreGameData::GetInstance().entityManager.components)
         {
             // Check for audio source component
             if (typeid(*(component.get())).hash_code() == typeid(AudioSourceComponent).hash_code())
@@ -37,8 +37,8 @@ namespace he
                     // Check for spatial
                     if (audioSourceComponent->isSpatialSound)
                     {
-                        Entity* targetEntity = CoreGameData::GetInstance()->entityManager.GetOwningEntity(audioSourceComponent);
-                        Entity* selfEntity = CoreGameData::GetInstance()->entityManager.GetOwningEntity(this);
+                        Entity* targetEntity = CoreGameData::GetInstance().entityManager.GetOwningEntity(audioSourceComponent);
+                        Entity* selfEntity = CoreGameData::GetInstance().entityManager.GetOwningEntity(this);
 
                         float x1 = selfEntity->transform.position.x;
                         float y1 = selfEntity->transform.position.y;
