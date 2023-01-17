@@ -11,6 +11,9 @@ namespace he
     class Transform
     {
     public:
+        Transform();
+
+    public:
         /**
          * Position of the entity.
          */

@@ -2,6 +2,11 @@
 
 namespace he
 {
+    Transform::Transform()
+        : position(sf::Vector2f(0.f, 0.f)), scale(sf::Vector2f(1.f, 1.f))
+    {
+    }
+
     void Transform::Rotate(float degAngle)
     {
         rotation += degAngle;
