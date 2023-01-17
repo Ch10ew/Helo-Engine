@@ -14,7 +14,7 @@ namespace he
     ClickableComponent::ClickableComponent(std::string id)
         : Component(id)
     {
-        priority = -1;
+        priority = -5;
     }
 
     void ClickableComponent::Init()
