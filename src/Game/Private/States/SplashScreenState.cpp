@@ -19,8 +19,8 @@ namespace ttt
 {
     SplashScreenState::SplashScreenState()
     {
-        _coreGameData = he::CoreGameData::GetInstance();
-        _assets = he::Assets::GetInstance();
+        _coreGameData = &(he::CoreGameData::GetInstance());
+        _assets = &(he::Assets::GetInstance());
     }
 
     void SplashScreenState::Update(float dt)

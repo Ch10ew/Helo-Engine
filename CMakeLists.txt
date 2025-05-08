@@ -170,7 +170,7 @@ add_dependencies(Game sfml)
 add_dependencies(imgui-sfml sfml)
 add_dependencies(imgui-sfml imgui)
 add_dependencies(Game imgui-sfml)
-set_target_properties(Game PROPERTIES EXCLUDE_FROM_ALL TRUE)
+#set_target_properties(Game PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
 
 

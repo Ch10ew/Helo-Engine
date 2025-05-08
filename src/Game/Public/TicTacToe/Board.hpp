@@ -2,6 +2,7 @@
 #define TTT_BOARD_HPP
 
 #include <cstdint>
+#include <functional>
 #include <utility>
 #include <vector>
 
@@ -28,6 +29,10 @@ namespace ttt
 
     class Board
     {
+    public:
+        std::function<void(int, int)> onAIPlace;
+        std::function<void()> onGameFinished;
+
     private:
         Board();
         Board(const int& width, const int& height);
@@ -56,6 +61,8 @@ namespace ttt
         const BoardState& GetState() const;
         const Piece& GetWinner() const;
         const bool IsPlaying() const;
+        const int GetWidth() const;
+        const int GetHeight() const;
 
         void ResetBoard();
         const bool Place(const Piece& piece, const int& x, const int& y);

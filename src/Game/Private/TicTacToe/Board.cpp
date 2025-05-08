@@ -2,6 +2,8 @@
 
 #include "TicTacToe/Util.hpp"
 
+#include <aixlog.hpp>
+
 #include <cstdint>
 #include <cstdlib>
 #include <ctime>
@@ -110,6 +112,26 @@ namespace ttt
     }
 
     /**
+     * @brief Gets the board width.
+     *
+     * @return The board width.
+     */
+    const int Board::GetWidth() const
+    {
+        return board_width_;
+    }
+
+    /**
+     * @brief Gets the board height.
+     *
+     * @return The board height.
+     */
+    const int Board::GetHeight() const
+    {
+        return board_height_;
+    }
+
+    /**
      * @brief Resets the board state.
      */
     void Board::ResetBoard()
@@ -133,20 +155,39 @@ namespace ttt
      */
     const bool Board::Place(const Piece& piece, const int& x, const int& y)
     {
+        LOG(INFO) << "Attempting to place piece '" << (char)(piece) << "' at x:" << x << ", y: " << y << "\n";
+
         // Checks before placing piece
         if (board_state_ == BoardState::Finished)
+        {
+            LOG(INFO) << "Failed to place piece '" << (char)(piece) << "' at x:" << x << ", y: " << y << " - Game Finished" << "\n";
             return false;
+        }
         if (piece == Piece::None)
+        {
+            LOG(INFO) << "Failed to place piece '" << (char)(piece) << "' at x:" << x << ", y: " << y << "\n";
             return false;
+        }
         if (x >= board_width_)
+        {
+            LOG(INFO) << "Failed to place piece '" << (char)(piece) << "' at x:" << x << ", y: " << y << "\n";
             return false;
+        }
         if (y >= board_height_)
+        {
+            LOG(INFO) << "Failed to place piece '" << (char)(piece) << "' at x:" << x << ", y: " << y << "\n";
             return false;
+        }
         if (board_[y * board_width_ + x] != Piece::None)
+        {
+            LOG(INFO) << "Failed to place piece '" << (char)(piece) << "' at x:" << x << ", y: " << y << "\n";
             return false;
+        }
 
         // Place the piece
         board_[y * board_width_ + x] = piece;
+
+        LOG(INFO) << "Successfully placed piece '" << (char)(piece) << "' at x:" << x << ", y: " << y << "\n";
 
         // Determine any wins
         EvaluateBoard();
@@ -161,6 +202,11 @@ namespace ttt
      */
     void Board::AIPlace(Piece AI_piece)
     {
+        if (board_state_ == BoardState::Finished)
+        {
+            return;
+        }
+
         // Try blocking/placing if 1 away from winning
         LinkInfo longest_link = GetLongestLinkInfo();
         int (*operation_x)(int) = Util::DoNothing;
@@ -200,6 +246,13 @@ namespace ttt
                     operation_x(longest_link.pieces.back().first),
                     operation_y(longest_link.pieces.back().second)))
             {
+                if (onAIPlace)
+                {
+                    onAIPlace(
+                        operation_x(longest_link.pieces.back().first),
+                        operation_y(longest_link.pieces.back().second)
+                    );
+                }
                 return;
             }
 
@@ -209,29 +262,74 @@ namespace ttt
                     operation_x(longest_link.pieces.front().first),
                     operation_y(longest_link.pieces.front().second)))
             {
+                if (onAIPlace)
+                {
+                    onAIPlace(
+                        operation_x(longest_link.pieces.front().first),
+                        operation_y(longest_link.pieces.front().second)
+                    );
+                }
                 return;
             }
         }
 
         // Try placing center
         if (this->Place(AI_piece, board_width_ / 2, board_height_ / 2))
+        {
+            if (onAIPlace)
+            {
+                onAIPlace(board_width_ / 2, board_height_ / 2);
+            }
             return;
+        }
 
         // Try placing corners
         if (this->Place(AI_piece, 0, 0))
+        {
+            if (onAIPlace)
+            {
+                onAIPlace(0, 0);
+            }
             return;
+        }
         if (this->Place(AI_piece, 0, board_height_ - 1))
+        {
+            if (onAIPlace)
+            {
+                onAIPlace(0, board_height_ - 1);
+            }
             return;
+        }
         if (this->Place(AI_piece, board_width_ - 1, 0))
+        {
+            if (onAIPlace)
+            {
+                onAIPlace(board_width_ - 1, 0);
+            }
             return;
+        }
         if (this->Place(AI_piece, board_width_ - 1, board_height_ - 1))
+        {
+            if (onAIPlace)
+            {
+                onAIPlace(board_width_ - 1, board_height_ - 1);
+            }
             return;
+        }
 
         // Try placing somewhere random :")
         srand(time(0)); // Seed PRNG
-        while (!this->Place(AI_piece, (rand() % board_width_) - 1, (rand() % board_height_) - 1))
+        int rand_x = rand() % board_width_;
+        int rand_y = rand() % board_height_;
+        while (!this->Place(AI_piece, rand_x, rand_y))
         {
-            // Do nothing, because the while condition already performs what we need
+            rand_x = rand() % board_width_;
+            rand_y = rand() % board_height_;
+        }
+
+        if (onAIPlace)
+        {
+            onAIPlace(rand_x, rand_y);
         }
     }
 
@@ -248,6 +346,33 @@ namespace ttt
      */
     void Board::EvaluateBoard()
     {
+        // Check draw
+        bool emptyExist = false;
+        for (int y = 0; y < board_height_; ++y)
+        {
+            for (int x = 0; x < board_width_; ++x)
+            {
+                Piece current = board_[y * board_width_ + x];
+                if (current == Piece::None)
+                {
+                    emptyExist = true;
+                }
+            }
+        }
+        if (!emptyExist)
+        {
+            board_state_ = BoardState::Finished;
+            winning_piece_ = Piece::None;
+
+            LOG(INFO) << "Winning piece '" << (char)(winning_piece_) << "'" << "\n";
+            if (onGameFinished)
+            {
+                onGameFinished();
+            }
+            return;
+        }
+
+        // Check win
         for (int y = 0; y < board_height_; ++y)
         {
             for (int x = 0; x < board_width_; ++x)
@@ -269,6 +394,13 @@ namespace ttt
                     {
                         board_state_ = BoardState::Finished;
                         winning_piece_ = current;
+
+                        LOG(INFO) << "Winning piece '" << (char)(winning_piece_) << "'" << "\n";
+                        if (onGameFinished)
+                        {
+                            onGameFinished();
+                        }
+
                         return;
                     }
 
@@ -285,6 +417,13 @@ namespace ttt
                     {
                         board_state_ = BoardState::Finished;
                         winning_piece_ = current;
+
+                        LOG(INFO) << "Winning piece '" << (char)(winning_piece_) << "'" << "\n";
+                        if (onGameFinished)
+                        {
+                            onGameFinished();
+                        }
+
                         return;
                     }
 
@@ -301,6 +440,13 @@ namespace ttt
                     {
                         board_state_ = BoardState::Finished;
                         winning_piece_ = current;
+
+                        LOG(INFO) << "Winning piece '" << (char)(winning_piece_) << "'" << "\n";
+                        if (onGameFinished)
+                        {
+                            onGameFinished();
+                        }
+
                         return;
                     }
 
@@ -317,6 +463,13 @@ namespace ttt
                     {
                         board_state_ = BoardState::Finished;
                         winning_piece_ = current;
+
+                        LOG(INFO) << "Winning piece '" << (char)(winning_piece_) << "'" << "\n";
+                        if (onGameFinished)
+                        {
+                            onGameFinished();
+                        }
+
                         return;
                     }
                 }

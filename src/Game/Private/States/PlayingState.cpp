@@ -40,8 +40,8 @@ namespace ttt
     void PlayingState::Init()
     {
         // Get pointers
-        _coreGameData = he::CoreGameData::GetInstance();
-        _assets = he::Assets::GetInstance();
+        _coreGameData = &(he::CoreGameData::GetInstance());
+        _assets = &(he::Assets::GetInstance());
         _board = Board::GetInstance();
 
         // Load assets
@@ -50,7 +50,7 @@ namespace ttt
         _assets->soundManager.Load("click", "data/Audio/click.wav");
 
         // Clear the entity manager
-        _coreGameData->GetInstance()->entityManager.Clear();
+        _coreGameData->GetInstance().entityManager.Clear();
 
         // Create entity for the playfield grid
         std::shared_ptr<he::SpriteRendererComponent> srcGrid = std::make_shared<he::SpriteRendererComponent>("srcGrid");
@@ -62,7 +62,7 @@ namespace ttt
         grid->AddComponent(alcGrid);
         grid->AddComponent(colGrid);
         grid->transform.position = sf::Vector2f(srcGrid->sprite.getGlobalBounds().width / 2, srcGrid->sprite.getGlobalBounds().height / 2);
-        _coreGameData->GetInstance()->entityManager.AddEntity(grid);
+        _coreGameData->GetInstance().entityManager.AddEntity(grid);
 
         // Create entities for each square in the playfield
         for (int i = 0; i < 9; ++i)
@@ -76,30 +76,39 @@ namespace ttt
             {
             case 0:
                 cc1->Callback = std::make_shared<he::CallbackMethod<ttt::BoardUpdater>>(boardUpdater.get(), ttt::BoardUpdater::Fill1);
+                _pieceClickableComponentMap[0] = cc1;
                 break;
             case 1:
                 cc1->Callback = std::make_shared<he::CallbackMethod<ttt::BoardUpdater>>(boardUpdater.get(), ttt::BoardUpdater::Fill2);
+                _pieceClickableComponentMap[1] = cc1;
                 break;
             case 2:
                 cc1->Callback = std::make_shared<he::CallbackMethod<ttt::BoardUpdater>>(boardUpdater.get(), ttt::BoardUpdater::Fill3);
+                _pieceClickableComponentMap[2] = cc1;
                 break;
             case 3:
                 cc1->Callback = std::make_shared<he::CallbackMethod<ttt::BoardUpdater>>(boardUpdater.get(), ttt::BoardUpdater::Fill4);
+                _pieceClickableComponentMap[3] = cc1;
                 break;
             case 4:
                 cc1->Callback = std::make_shared<he::CallbackMethod<ttt::BoardUpdater>>(boardUpdater.get(), ttt::BoardUpdater::Fill5);
+                _pieceClickableComponentMap[4] = cc1;
                 break;
             case 5:
                 cc1->Callback = std::make_shared<he::CallbackMethod<ttt::BoardUpdater>>(boardUpdater.get(), ttt::BoardUpdater::Fill6);
+                _pieceClickableComponentMap[5] = cc1;
                 break;
             case 6:
                 cc1->Callback = std::make_shared<he::CallbackMethod<ttt::BoardUpdater>>(boardUpdater.get(), ttt::BoardUpdater::Fill7);
+                _pieceClickableComponentMap[6] = cc1;
                 break;
             case 7:
                 cc1->Callback = std::make_shared<he::CallbackMethod<ttt::BoardUpdater>>(boardUpdater.get(), ttt::BoardUpdater::Fill8);
+                _pieceClickableComponentMap[7] = cc1;
                 break;
             case 8:
                 cc1->Callback = std::make_shared<he::CallbackMethod<ttt::BoardUpdater>>(boardUpdater.get(), ttt::BoardUpdater::Fill9);
+                _pieceClickableComponentMap[8] = cc1;
                 break;
             }
             std::shared_ptr<he::AudioSourceComponent> asc1 = std::make_shared<he::AudioSourceComponent>("alc" + std::to_string(i + 1));
@@ -111,8 +120,16 @@ namespace ttt
             grid1->AddComponent(asc1);
             grid1->AddComponent(colGrid1);
             grid1->transform.position = sf::Vector2f(132 + 256 * (i % 3) + 16 * (i % 3), 132 + 256 * (i / 3) + 16 * (i / 3));
-            _coreGameData->GetInstance()->entityManager.AddEntity(grid1);
+            _coreGameData->GetInstance().entityManager.AddEntity(grid1);
         }
+
+        // Define the function that places the AI piece
+        _board->GetInstance()->onAIPlace = [&](int x, int y) {
+            int flattenedIndex = y*_board->GetInstance()->GetWidth()+x;
+            boardUpdater->FillAI(_pieceClickableComponentMap[flattenedIndex].get());
+        };
+
+        // Define the win behaviour
 
         /*
         _coreGameData->GetInstance()->entityManager.RemoveEntity("grid1");

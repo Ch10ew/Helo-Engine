@@ -39,3 +39,6 @@
 [Dd]oxygen/
 html/
 latex/
+
+#VSCode Settings
+.vscode/

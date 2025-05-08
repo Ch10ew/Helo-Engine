@@ -14,7 +14,7 @@ namespace ttt
 {
     void SpriteExpander::Callback(he::Component* component, he::Component* ignore)
     {
-        he::Entity* selfEntity = he::CoreGameData::GetInstance()->entityManager.GetOwningEntity(component);
+        he::Entity* selfEntity = he::CoreGameData::GetInstance().entityManager.GetOwningEntity(component);
 
         he::Component* spriteRendererComponentPtr = selfEntity->GetComponentByClass<he::SpriteRendererComponent>();
         he::SpriteRendererComponent* spriteRendererComponent = dynamic_cast<he::SpriteRendererComponent*>(spriteRendererComponentPtr);

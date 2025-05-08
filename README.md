@@ -44,7 +44,7 @@ Example for CMake CLI targeting Unix Makefiles:
 ```
 mkdir build
 cd build
-cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=../install -DSWI_PROLOG_LIBRARY=lib/swipl/bin -DSWI_PROLOG_INCLUDE_DIR=lib/swipl/include -DSWI_PROLOG_BIN_DIR=lib/swipl/bin
+cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=../install
 make
 ```
 

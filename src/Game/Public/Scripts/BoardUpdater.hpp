@@ -19,6 +19,8 @@ namespace ttt
         void Fill7(he::Component* component, he::Component* ignore);
         void Fill8(he::Component* component, he::Component* ignore);
         void Fill9(he::Component* component, he::Component* ignore);
+
+        void FillAI(he::Component* component);
     };
 } // namespace ttt
 

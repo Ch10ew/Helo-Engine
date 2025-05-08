@@ -4,11 +4,14 @@
 #include "AssetManager/Assets.hpp"
 #include "Core/CoreGameData.hpp"
 #include "Core/GameState.hpp"
+#include "Components/ClickableComponent.hpp"
 
 #include "Scripts/BoardUpdater.hpp"
 #include "TicTacToe/Board.hpp"
 
 #include <SFML/Graphics.hpp>
+
+#include <map>
 
 namespace ttt
 {
@@ -37,6 +40,7 @@ namespace ttt
 
     private:
         ttt::Piece _yourPiece;
+        std::map<int, std::shared_ptr<he::ClickableComponent>> _pieceClickableComponentMap;
 
     private:
         sf::Clock _clock;
